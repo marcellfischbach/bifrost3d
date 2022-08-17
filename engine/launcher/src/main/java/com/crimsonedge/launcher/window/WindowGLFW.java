@@ -22,6 +22,14 @@ public class WindowGLFW implements IWindow {
 
 
     public void initialize() {
+
+        glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+        glfwWindowHint(GLFW_RED_BITS, 8);
+        glfwWindowHint(GLFW_GREEN_BITS, 8);
+        glfwWindowHint(GLFW_BLUE_BITS, 8);
+        glfwWindowHint(GLFW_ALPHA_BITS, 8);
+
+
         this.wnd = glfwCreateWindow(this.width, this.height, this.title, 0, 0);
         this.mouse = new MouseGLFW(this.wnd, this);
 
