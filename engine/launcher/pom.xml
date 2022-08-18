@@ -5,13 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>CrimsonEdge</artifactId>
-        <groupId>com.crimsonedge</groupId>
+        <groupId>com.bifrost3d</groupId>
+        <artifactId>engine</artifactId>
         <version>1.0-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>com.crimsonedge.launcher</artifactId>
+    <artifactId>com.bifrost3d.launcher</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>launcher</name>
 
@@ -19,8 +19,13 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.crimsonedge</groupId>
-            <artifactId>com.crimsonedge.core</artifactId>
+            <groupId>com.bifrost3d</groupId>
+            <artifactId>com.bifrost3d.core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.bifrost3d</groupId>
+            <artifactId>com.bifrost3d.graphics-opengl</artifactId>
         </dependency>
 
         <dependency>

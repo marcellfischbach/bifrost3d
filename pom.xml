@@ -4,34 +4,48 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.crimsonedge</groupId>
-    <artifactId>CrimsonEdge</artifactId>
+    <groupId>com.bifrost3d</groupId>
+    <artifactId>engine</artifactId>
+    <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
 
-    <packaging>pom</packaging>
 
     <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
         <lwjgl.version>3.2.3</lwjgl.version>
         <lwjgl.natives>natives-windows</lwjgl.natives>
+        <log4j.version>2.18.0</log4j.version>
+        <junit.version>5.9.0</junit.version>
+
     </properties>
 
 
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>com.crimsonedge</groupId>
-                <artifactId>com.crimsonedge.core</artifactId>
+                <groupId>com.bifrost3d</groupId>
+                <artifactId>com.bifrost3d.core</artifactId>
                 <version>1.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
-                <groupId>com.crimsonedge</groupId>
-                <artifactId>com.crimsonedge.launcher</artifactId>
+                <groupId>com.bifrost3d</groupId>
+                <artifactId>com.bifrost3d.graphics-opengl</artifactId>
                 <version>1.0-SNAPSHOT</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.bifrost3d</groupId>
+                <artifactId>com.bifrost3d.launcher</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.bifrost3d</groupId>
+                <artifactId>com.bifrost3d.math</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
 
             <dependency>
                 <groupId>org.lwjgl</groupId>
@@ -40,11 +54,47 @@
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
+
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-api</artifactId>
+                <version>${log4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-core</artifactId>
+                <version>${log4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
     <modules>
         <module>engine/core</module>
+        <module>engine/graphics-opengl</module>
+        <module>engine/math</module>
         <module>engine/launcher</module>
     </modules>
 </project>
