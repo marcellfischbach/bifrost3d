@@ -14,12 +14,13 @@ public class Main {
         Engine engine = Engine.create();
         engine.initializeModules();
 
-        IKeyboard keyboard = ObjectRegistry.get(IKeyboard.class).orElse(null);
-        IMouse mouse = ObjectRegistry.get(IMouse.class).orElse(null);
-        IDevice device = ObjectRegistry.get(IDevice.class).orElse(null);
-        IWindow window = ObjectRegistry.get(IWindow.class).orElse(null);
+        IKeyboard keyboard = ObjectRegistry.get(IKeyboard.class).orElseThrow(NullPointerException::new);
+        IMouse mouse = ObjectRegistry.get(IMouse.class).orElseThrow(NullPointerException::new);
+        IDevice device = ObjectRegistry.get(IDevice.class).orElseThrow(NullPointerException::new);
+        IWindow window = ObjectRegistry.get(IWindow.class).orElseThrow(NullPointerException::new);
 
-        while (true) {
+        boolean running = true;
+        while (running) {
             try {
                 Thread.sleep(10L);
             } catch (Exception e) {
@@ -30,8 +31,6 @@ public class Main {
             device.clear(true, new ColorRGBA(0.5f, 0.0f, 0.0f, 1.0f), true, 1.0f, true, 0);
             window.swap();
 
-//            System.out.printf(" %.2f %.2f - %.2f %.2f\n", mouse.getX(), mouse.getY(), mouse.getDeltaX(), mouse.getDeltaY());
-
 
             if (mouse.isDown(EMouseButton.MB_Right)) {
                 mouse.setCursorMode(ECursorMode.Locked);
@@ -39,7 +38,7 @@ public class Main {
                 mouse.setCursorMode(ECursorMode.Normal);
             }
             if (keyboard.isPressed(EKey.K_Escape)) {
-                break;
+                running = false;
             }
         }
 

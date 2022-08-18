@@ -72,6 +72,7 @@
                 <version>${junit.version}</version>
                 <scope>test</scope>
             </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -89,12 +90,23 @@
             <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
+
+
     </dependencies>
 
     <modules>
         <module>engine/core</module>
         <module>engine/graphics-opengl</module>
-        <module>engine/math</module>
         <module>engine/launcher</module>
+        <module>engine/math</module>
     </modules>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.2</version>
+            </plugin>
+        </plugins>
+    </build>
 </project>
