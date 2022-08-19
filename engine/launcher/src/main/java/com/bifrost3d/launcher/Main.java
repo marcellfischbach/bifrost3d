@@ -22,10 +22,12 @@ public class Main {
         boolean running = true;
         while (running) {
             try {
-                Thread.sleep(10L);
-            } catch (Exception e) {
-                //
+                Thread.sleep(10);
             }
+            catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+            }
+
             window.handleEvents();
 
             device.clear(true, new ColorRGBA(0.5f, 0.0f, 0.0f, 1.0f), true, 1.0f, true, 0);
@@ -41,6 +43,6 @@ public class Main {
                 running = false;
             }
         }
-
     }
+
 }
