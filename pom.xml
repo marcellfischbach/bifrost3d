@@ -17,6 +17,7 @@
         <lwjgl.natives>natives-windows</lwjgl.natives>
         <log4j.version>2.18.0</log4j.version>
         <junit.version>5.9.0</junit.version>
+		<lombok.version>1.18.22</lombok.version>
 
     </properties>
 
@@ -73,6 +74,13 @@
                 <scope>test</scope>
             </dependency>
 
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+                <scope>compile</scope>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -89,6 +97,13 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>compile</scope>
         </dependency>
 
 

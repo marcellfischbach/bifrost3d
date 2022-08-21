@@ -2,14 +2,14 @@ package com.bifrost3d.core.resource;
 
 public class InvalidProtocolException extends RuntimeException {
 
-    private final String protocol;
+    private final String resource;
 
-    public InvalidProtocolException(String protocol) {
-        super("Invalid protocol: " + protocol);
-        this.protocol = protocol;
+    public InvalidProtocolException(String resource) {
+        super("Invalid resource for resource: " + resource);
+        this.resource = resource;
     }
 
-    public String getProtocol() {
-        return protocol;
+    public String getResource() {
+        return resource;
     }
 }

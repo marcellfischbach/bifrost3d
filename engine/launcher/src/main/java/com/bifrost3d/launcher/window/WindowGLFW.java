@@ -17,7 +17,7 @@ public class WindowGLFW implements IWindow {
     private String title = "Crossengine";
     private long wnd;
 
-    private KeyboardGLFW keyboard = new KeyboardGLFW();
+    private final KeyboardGLFW keyboard = new KeyboardGLFW();
     private MouseGLFW mouse;
 
 
@@ -32,6 +32,8 @@ public class WindowGLFW implements IWindow {
 
         this.wnd = glfwCreateWindow(this.width, this.height, this.title, 0, 0);
         this.mouse = new MouseGLFW(this.wnd, this);
+
+        glfwSetWindowPos(this.wnd, 1, 31);
 
         ObjectRegistry.register(IKeyboard.class, this.keyboard);
         ObjectRegistry.register(IMouse.class, this.mouse);
