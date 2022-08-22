@@ -2,15 +2,27 @@ package com.bifrost3d.graphics.opengl.gl4;
 
 import com.bifrost3d.core.graphics.IProgram;
 import com.bifrost3d.core.graphics.IShader;
+import com.bifrost3d.core.graphics.ProgramLinkException;
 
 import static org.lwjgl.opengl.GL44.*;
 
 public class ProgramGL4 implements IProgram {
 
-    private final int name;
+    private int name;
 
     public ProgramGL4() {
         this.name = glCreateProgram();
+    }
+
+    public int glName() {
+        return this.name;
+    }
+
+    public void delete() {
+        if (this.name != 0) {
+            glDeleteProgram(this.name);
+            this.name = 0;
+        }
     }
 
     @Override
@@ -18,10 +30,6 @@ public class ProgramGL4 implements IProgram {
         glAttachShader(this.name, ((ShaderGL4) shader).glName());
     }
 
-    @Override
-    public void detach(IShader shader) {
-        glDetachShader(this.name, ((ShaderGL4) shader).glName());
-    }
 
     @Override
     public void link() {
@@ -29,7 +37,7 @@ public class ProgramGL4 implements IProgram {
         int status = glGetProgrami(this.name, GL_LINK_STATUS);
         if (status == GL_FALSE) {
             String log = glGetProgramInfoLog(this.name);
-            throw new RuntimeException(log);
+            throw new ProgramLinkException(log);
         }
     }
 }
