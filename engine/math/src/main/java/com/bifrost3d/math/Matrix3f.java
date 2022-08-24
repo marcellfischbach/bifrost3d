@@ -141,8 +141,15 @@ public final class Matrix3f {
         float c = Mathf.cos(rad);
         float s = Mathf.sin(rad);
 
+        r.m00 = 1.0f;
+        r.m01 = 0.0f;
+        r.m02 = 0.0f;
+
+        r.m10 = 0.0f;
         r.m11 = c;
         r.m12 = s;
+
+        r.m20 = 0.0f;
         r.m21 = -s;
         r.m22 = c;
 
@@ -159,9 +166,17 @@ public final class Matrix3f {
         float s = Mathf.sin(rad);
 
         r.m00 = c;
+        r.m01 = 0.0f;
         r.m02 = -s;
+
+        r.m10 = 0.0f;
+        r.m11 = 1.0f;
+        r.m12 = 0.0f;
+
         r.m20 = s;
+        r.m21 = 0.0f;
         r.m22 = c;
+
         return r;
     }
 
@@ -176,8 +191,16 @@ public final class Matrix3f {
 
         r.m00 = c;
         r.m01 = s;
+        r.m02 = 0.0f;
+
         r.m10 = -s;
         r.m11 = c;
+        r.m12 = 0.0f;
+
+        r.m20 = 0.0f;
+        r.m21 = 0.0f;
+        r.m22 = 1.0f;
+
         return r;
     }
 
@@ -204,9 +227,11 @@ public final class Matrix3f {
         r.m00 = x * x * ic + c;
         r.m10 = x * y * ic - z * s;
         r.m20 = x * z * ic + y * s;
+
         r.m01 = y * x * ic + z * s;
         r.m11 = y * y * ic + c;
         r.m21 = y * z * ic - x * s;
+
         r.m02 = z * x * ic - y * s;
         r.m12 = z * y * ic + x * s;
         r.m22 = z * z * ic + c;
