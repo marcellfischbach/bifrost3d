@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SuppressWarnings("squid:S5976")
 class MathfTest {
 
     @Test
@@ -26,6 +27,8 @@ class MathfTest {
         double clampedValue = Mathf.clamp(value, 15.0, 25.0);
         assertEquals(25.0, clampedValue);
     }
+
+    
 
     @Test
     void testClamp01_InRange() {
