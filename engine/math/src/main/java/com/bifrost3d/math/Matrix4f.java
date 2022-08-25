@@ -1,6 +1,6 @@
 package com.bifrost3d.math;
 
-@SuppressWarnings({"squid:S1104", "squid:S107"})
+@SuppressWarnings({"Duplicates", "squid:S1104", "squid:S107"})
 public final class Matrix4f {
 
     public float m00;
@@ -97,7 +97,7 @@ public final class Matrix4f {
         r.x = m10;
         r.y = m11;
         r.z = m12;
-        r.z = m13;
+        r.w = m13;
         return r;
     }
 
@@ -109,7 +109,7 @@ public final class Matrix4f {
         r.x = m20;
         r.y = m21;
         r.z = m22;
-        r.z = m23;
+        r.w = m23;
         return r;
     }
 
@@ -122,8 +122,137 @@ public final class Matrix4f {
         r.x = m30;
         r.y = m31;
         r.z = m32;
-        r.z = m33;
+        r.w = m33;
         return r;
+    }
+
+    public Matrix4f inverted() {
+        return inverted(new Matrix4f());
+    }
+
+    public Matrix4f inverted(Matrix4f r) {
+        float v0 = m20 * m31 - m21 * m30;
+        float v1 = m20 * m32 - m22 * m30;
+        float v2 = m20 * m33 - m23 * m30;
+        float v3 = m21 * m32 - m22 * m31;
+        float v4 = m21 * m33 - m23 * m31;
+        float v5 = m22 * m33 - m23 * m32;
+
+        float t00 = (v5 * m11 - v4 * m12 + v3 * m13);
+        float t10 = -(v5 * m10 - v2 * m12 + v1 * m13);
+        float t20 = (v4 * m10 - v2 * m11 + v0 * m13);
+        float t30 = -(v3 * m10 - v1 * m11 + v0 * m12);
+
+        float invDet = 1.0f / (t00 * m00 + t10 * m01 + t20 * m02 + t30 * m03);
+
+        float lm00 = t00 * invDet;
+        float lm10 = t10 * invDet;
+        float lm20 = t20 * invDet;
+        float lm30 = t30 * invDet;
+
+        float lm01 = -(v5 * m01 - v4 * m02 + v3 * m03) * invDet;
+        float lm11 = (v5 * m00 - v2 * m02 + v1 * m03) * invDet;
+        float lm21 = -(v4 * m00 - v2 * m01 + v0 * m03) * invDet;
+        float lm31 = (v3 * m00 - v1 * m01 + v0 * m02) * invDet;
+
+        v0 = m10 * m31 - m11 * m30;
+        v1 = m10 * m32 - m12 * m30;
+        v2 = m10 * m33 - m13 * m30;
+        v3 = m11 * m32 - m12 * m31;
+        v4 = m11 * m33 - m13 * m31;
+        v5 = m12 * m33 - m13 * m32;
+
+        float lm02 = (v5 * m01 - v4 * m02 + v3 * m03) * invDet;
+        float lm12 = -(v5 * m00 - v2 * m02 + v1 * m03) * invDet;
+        float lm22 = (v4 * m00 - v2 * m01 + v0 * m03) * invDet;
+        float lm32 = -(v3 * m00 - v1 * m01 + v0 * m02) * invDet;
+
+        v0 = m21 * m10 - m20 * m11;
+        v1 = m22 * m10 - m20 * m12;
+        v2 = m23 * m10 - m20 * m13;
+        v3 = m22 * m11 - m21 * m12;
+        v4 = m23 * m11 - m21 * m13;
+        v5 = m23 * m12 - m22 * m13;
+
+        float lm03 = -(v5 * m01 - v4 * m02 + v3 * m03) * invDet;
+        float lm13 = (v5 * m00 - v2 * m02 + v1 * m03) * invDet;
+        float lm23 = -(v4 * m00 - v2 * m01 + v0 * m03) * invDet;
+        float lm33 = (v3 * m00 - v1 * m01 + v0 * m02) * invDet;
+
+
+        r.m00 = lm00;
+        r.m01 = lm01;
+        r.m02 = lm02;
+        r.m03 = lm03;
+
+        r.m10 = lm10;
+        r.m11 = lm11;
+        r.m12 = lm12;
+        r.m13 = lm13;
+
+        r.m20 = lm20;
+        r.m21 = lm21;
+        r.m22 = lm22;
+        r.m23 = lm23;
+
+        r.m30 = lm30;
+        r.m31 = lm31;
+        r.m32 = lm32;
+        r.m33 = lm33;
+
+        return r;
+    }
+
+    public void invert() {
+        inverted(this);
+    }
+
+    public Matrix4f transposed(Matrix4f r) {
+        float lm00 = m00;
+        float lm01 = m01;
+        float lm02 = m02;
+        float lm03 = m03;
+
+        float lm10 = m10;
+        float lm11 = m11;
+        float lm12 = m12;
+        float lm13 = m13;
+
+        float lm20 = m20;
+        float lm21 = m21;
+        float lm22 = m22;
+        float lm23 = m23;
+
+        float lm30 = m30;
+        float lm31 = m31;
+        float lm32 = m32;
+        float lm33 = m33;
+
+        r.m00 = lm00;
+        r.m01 = lm10;
+        r.m02 = lm20;
+        r.m03 = lm30;
+
+        r.m10 = lm01;
+        r.m11 = lm11;
+        r.m12 = lm21;
+        r.m13 = lm31;
+
+        r.m20 = lm02;
+        r.m21 = lm12;
+        r.m22 = lm22;
+        r.m23 = lm32;
+
+        r.m30 = lm03;
+        r.m31 = lm13;
+        r.m32 = lm23;
+        r.m33 = lm33;
+
+        return r;
+    }
+
+    public void transpose() {
+        transposed(this);
     }
 
     public static Matrix4f mul(Matrix4f m0, Matrix4f m1) {
