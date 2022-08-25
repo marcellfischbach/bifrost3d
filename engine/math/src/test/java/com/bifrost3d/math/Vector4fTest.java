@@ -133,6 +133,16 @@ class Vector4fTest {
         Vector4f v = new Vector4f(2.0f, 4.0f, 6.0f, 8.0f);
 
         assertEquals(120.0f, v.dot());
+
+        float dotSameDirection = Vector4f.dot(new Vector4f(1.0f, 0.0f, 0.0f, 0.0f), new Vector4f(1.0f, 0.0f, 0.0f, 0.0f));
+        float dotOrthogonal1 = Vector4f.dot(new Vector4f(1.0f, 0.0f, 0.0f, 0.0f), new Vector4f(0.0f, 1.0f, 0.0f, 0.0f));
+        float dotOrthogonal2 = Vector4f.dot(new Vector4f(1.0f, 0.0f, 0.0f, 0.0f), new Vector4f(0.0f, -1.0f, 0.0f, 0.0f));
+        float dotBackDirection = Vector4f.dot(new Vector4f(1.0f, 0.0f, 0.0f, 0.0f), new Vector4f(-1.0f, 0.0f, 0.0f, 0.0f));
+
+        assertEquals(1.0f, dotSameDirection);
+        assertEquals(0.0f, dotOrthogonal1);
+        assertEquals(0.0f, dotOrthogonal2);
+        assertEquals(-1.0f, dotBackDirection);
     }
 
     @Test

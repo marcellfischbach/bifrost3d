@@ -126,6 +126,17 @@ class Vector3fTest {
         Vector3f v = new Vector3f(2.0f, 4.0f, 6.0f);
 
         assertEquals(56.0f, v.dot());
+
+
+        float dotSameDirection = Vector3f.dot(new Vector3f(1.0f, 0.0f, 0.0f), new Vector3f(1.0f, 0.0f, 0.0f));
+        float dotOrthogonal1 = Vector3f.dot(new Vector3f(1.0f, 0.0f, 0.0f), new Vector3f(0.0f, 1.0f, 0.0f));
+        float dotOrthogonal2 = Vector3f.dot(new Vector3f(1.0f, 0.0f, 0.0f), new Vector3f(0.0f, -1.0f, 0.0f));
+        float dotBackDirection = Vector3f.dot(new Vector3f(1.0f, 0.0f, 0.0f), new Vector3f(-1.0f, 0.0f, 0.0f));
+
+        assertEquals(1.0f, dotSameDirection);
+        assertEquals(0.0f, dotOrthogonal1);
+        assertEquals(0.0f, dotOrthogonal2);
+        assertEquals(-1.0f, dotBackDirection);
     }
 
     @Test
