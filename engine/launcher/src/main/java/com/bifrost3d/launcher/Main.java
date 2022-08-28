@@ -2,7 +2,7 @@ package com.bifrost3d.launcher;
 
 import com.bifrost3d.core.Engine;
 import com.bifrost3d.core.ObjectRegistry;
-import com.bifrost3d.core.graphics.IDevice;
+import com.bifrost3d.core.graphics.IGraphics;
 import com.bifrost3d.core.window.*;
 import com.bifrost3d.math.ColorRGBA;
 
@@ -16,7 +16,7 @@ public class Main {
 
         IKeyboard keyboard = ObjectRegistry.get(IKeyboard.class).orElseThrow(NullPointerException::new);
         IMouse mouse = ObjectRegistry.get(IMouse.class).orElseThrow(NullPointerException::new);
-        IDevice device = ObjectRegistry.get(IDevice.class).orElseThrow(NullPointerException::new);
+        IGraphics device = ObjectRegistry.get(IGraphics.class).orElseThrow(NullPointerException::new);
         IWindow window = ObjectRegistry.get(IWindow.class).orElseThrow(NullPointerException::new);
 
         boolean running = true;

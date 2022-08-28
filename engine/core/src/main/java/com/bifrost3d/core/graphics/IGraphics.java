@@ -2,7 +2,7 @@ package com.bifrost3d.core.graphics;
 
 import com.bifrost3d.math.ColorRGBA;
 
-public interface IDevice {
+public interface IGraphics {
 
     void setClearColor(ColorRGBA color);
     void setClearDepth (float depth);
@@ -13,4 +13,12 @@ public interface IDevice {
 
     IShader createShader (EShaderType type);
     IProgram createProgram ();
+
+    IVertexBuffer createVertexBuffer ();
+    IIndexBuffer createIndexBuffer ();
+
+    void setVertexBuffer (IVertexBuffer vertexBuffer);
+    void setIndexBuffer (IIndexBuffer indexBuffer);
+
+    Mesh createMesh ();
 }

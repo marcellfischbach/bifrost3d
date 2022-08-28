@@ -1,14 +1,12 @@
 package com.bifrost3d.graphics.opengl.gl4;
 
-import com.bifrost3d.core.graphics.EShaderType;
-import com.bifrost3d.core.graphics.IDevice;
-import com.bifrost3d.core.graphics.IProgram;
-import com.bifrost3d.core.graphics.IShader;
+import com.bifrost3d.core.graphics.*;
 import com.bifrost3d.math.ColorRGBA;
 import org.lwjgl.opengl.GL;
+
 import static org.lwjgl.opengl.GL44.*;
 
-public class DeviceGL4 implements IDevice {
+public class GraphicsGL4 implements IGraphics {
 
     private int clearColor;
 
@@ -16,18 +14,20 @@ public class DeviceGL4 implements IDevice {
 
     private int clearStencil;
 
+    private VertexBufferGL4 vertexBuffer = null;
 
-    public void initialize () {
+    private IndexBufferGL4 indexBuffer = null;
+
+    public void initialize() {
         GL.createCapabilities();
 
-        clearColor = new ColorRGBA(0.0f, 0.0f, 0.0f, 0.0f).rgb();
+        clearColor = new ColorRGBA(0.0f, 0.0f, 0.0f, 0.0f).rgba();
         clearDepth = 1.0f;
         clearStencil = 0;
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         glClearDepth(1.0f);
         glClearStencil(0);
     }
-
 
 
     @Override
@@ -69,8 +69,8 @@ public class DeviceGL4 implements IDevice {
 
 
     @Override
-    public void setClearColor (ColorRGBA color) {
-        int colorRGB = color.rgb();
+    public void setClearColor(ColorRGBA color) {
+        int colorRGB = color.rgba();
         if (colorRGB != this.clearColor) {
             this.clearColor = colorRGB;
             glClearColor(color.r, color.g, color.b, color.a);
@@ -102,5 +102,38 @@ public class DeviceGL4 implements IDevice {
     @Override
     public IProgram createProgram() {
         return new ProgramGL4();
+    }
+
+    @Override
+    public IVertexBuffer createVertexBuffer() {
+        return new VertexBufferGL4(this);
+    }
+
+    @Override
+    public IIndexBuffer createIndexBuffer() {
+        return new IndexBufferGL4(this);
+    }
+
+    @Override
+    public Mesh createMesh() {
+        return new MeshGL4(this);
+    }
+
+    @Override
+    public void setVertexBuffer(IVertexBuffer vertexBuffer) {
+        VertexBufferGL4 vb = (VertexBufferGL4) vertexBuffer;
+        if (vb != this.vertexBuffer) {
+            this.vertexBuffer = vb;
+            this.vertexBuffer.bind();
+        }
+    }
+
+    @Override
+    public void setIndexBuffer(IIndexBuffer indexBuffer) {
+        IndexBufferGL4 ib = (IndexBufferGL4) indexBuffer;
+        if (ib != this.indexBuffer) {
+            this.indexBuffer = ib;
+            this.indexBuffer.bind();
+        }
     }
 }
