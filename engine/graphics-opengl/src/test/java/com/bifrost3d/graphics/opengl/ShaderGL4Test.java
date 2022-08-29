@@ -30,10 +30,10 @@ class ShaderGL4Test extends GL4TestBase {
     void createVertexShader() {
         ShaderGL4 shader = null;
         try {
-            shader = new ShaderGL4(EShaderType.Vertex);
+            shader = new ShaderGL4(EShaderType.VERTEX);
 
             assertNotEquals(0, shader.glName());
-            assertEquals(EShaderType.Vertex, shader.getType());
+            assertEquals(EShaderType.VERTEX, shader.getType());
         } finally {
             if (shader != null) {
                 shader.delete();
@@ -45,10 +45,10 @@ class ShaderGL4Test extends GL4TestBase {
     void createFragmentShader() {
         ShaderGL4 shader = null;
         try {
-            shader = new ShaderGL4(EShaderType.Fragment);
+            shader = new ShaderGL4(EShaderType.FRAGMENT);
 
             assertNotEquals(0, shader.glName());
-            assertEquals(EShaderType.Fragment, shader.getType());
+            assertEquals(EShaderType.FRAGMENT, shader.getType());
         } finally {
             if (shader != null) {
                 shader.delete();
@@ -60,10 +60,10 @@ class ShaderGL4Test extends GL4TestBase {
     void createEvalShader() {
         ShaderGL4 shader = null;
         try {
-            shader = new ShaderGL4(EShaderType.Eval);
+            shader = new ShaderGL4(EShaderType.TESS_EVAL);
 
             assertNotEquals(0, shader.glName());
-            assertEquals(EShaderType.Eval, shader.getType());
+            assertEquals(EShaderType.TESS_EVAL, shader.getType());
         } finally {
             if (shader != null) {
                 shader.delete();
@@ -74,10 +74,10 @@ class ShaderGL4Test extends GL4TestBase {
     void createControlShader() {
         ShaderGL4 shader = null;
         try {
-            shader = new ShaderGL4(EShaderType.Control);
+            shader = new ShaderGL4(EShaderType.TESS_CTRL);
 
             assertNotEquals(0, shader.glName());
-            assertEquals(EShaderType.Control, shader.getType());
+            assertEquals(EShaderType.TESS_CTRL, shader.getType());
         } finally {
             if (shader != null) {
                 shader.delete();
@@ -90,10 +90,10 @@ class ShaderGL4Test extends GL4TestBase {
     void createGeometryShader() {
         ShaderGL4 shader = null;
         try {
-            shader = new ShaderGL4(EShaderType.Geometry);
+            shader = new ShaderGL4(EShaderType.GEOMETRY);
 
             assertNotEquals(0, shader.glName());
-            assertEquals(EShaderType.Geometry, shader.getType());
+            assertEquals(EShaderType.GEOMETRY, shader.getType());
         } finally {
             if (shader != null) {
                 shader.delete();
@@ -105,10 +105,10 @@ class ShaderGL4Test extends GL4TestBase {
     void createComputeShader() {
         ShaderGL4 shader = null;
         try {
-            shader = new ShaderGL4(EShaderType.Compute);
+            shader = new ShaderGL4(EShaderType.COMPUTE);
 
             assertNotEquals(0, shader.glName());
-            assertEquals(EShaderType.Compute, shader.getType());
+            assertEquals(EShaderType.COMPUTE, shader.getType());
         } finally {
             if (shader != null) {
                 shader.delete();
@@ -132,7 +132,7 @@ class ShaderGL4Test extends GL4TestBase {
 
         ShaderGL4 shader = null;
         try {
-            shader = new ShaderGL4(EShaderType.Vertex);
+            shader = new ShaderGL4(EShaderType.VERTEX);
             shader.setSource(src);
             shader.compile();
         } finally {
@@ -161,7 +161,7 @@ class ShaderGL4Test extends GL4TestBase {
 
         ShaderGL4 shader = null;
         try {
-            shader = new ShaderGL4(EShaderType.Vertex);
+            shader = new ShaderGL4(EShaderType.VERTEX);
             shader.setSource(src);
             shader.compile();
         } finally {
@@ -190,7 +190,7 @@ class ShaderGL4Test extends GL4TestBase {
 
         ShaderGL4 shader = null;
         try {
-            shader = new ShaderGL4(EShaderType.Fragment);
+            shader = new ShaderGL4(EShaderType.FRAGMENT);
             shader.setSource(src);
             shader.compile();
         } finally {
@@ -217,7 +217,7 @@ class ShaderGL4Test extends GL4TestBase {
 
         ShaderGL4 shader = null;
         try {
-            shader = new ShaderGL4(EShaderType.Fragment);
+            shader = new ShaderGL4(EShaderType.FRAGMENT);
             shader.setSource(src);
             shader.compile();
         } finally {

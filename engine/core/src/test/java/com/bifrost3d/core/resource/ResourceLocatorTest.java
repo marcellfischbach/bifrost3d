@@ -19,6 +19,7 @@ class ResourceLocatorTest {
     }
 
     @Test
+    @SuppressWarnings("java:S5863")
     void testProtocolIdentity() {
         ResourceLocator locator0 = new ResourceLocator("file:///path/to/file.txt");
 
@@ -26,10 +27,11 @@ class ResourceLocatorTest {
     }
 
     @Test
+    @SuppressWarnings("java:S5845")
     void testProtocolDifferentType() {
         ResourceLocator locator0 = new ResourceLocator("file:///path/to/file.txt");
 
-        assertNotEquals(locator0, "This is a string");
+        assertNotEquals("This is a string", locator0);
     }
 
     @Test
@@ -73,19 +75,19 @@ class ResourceLocatorTest {
     @Test
     void testProtocolFile() {
         ResourceLocator locator = new ResourceLocator("file://some_path");
-        assertEquals(ResourceLocator.Protocol.File, locator.getProtocol());
+        assertEquals(ResourceLocator.Protocol.FILE, locator.getProtocol());
     }
 
     @Test
     void testProtocolArchive() {
         ResourceLocator locator = new ResourceLocator("archive://some_path");
-        assertEquals(ResourceLocator.Protocol.Archive, locator.getProtocol());
+        assertEquals(ResourceLocator.Protocol.ARCHIVE, locator.getProtocol());
     }
 
     @Test
     void testProtocolLocal() {
         ResourceLocator locator = new ResourceLocator(":some_path");
-        assertEquals(ResourceLocator.Protocol.Local, locator.getProtocol());
+        assertEquals(ResourceLocator.Protocol.LOCAL, locator.getProtocol());
     }
     @Test
     void testNoProtocol() {

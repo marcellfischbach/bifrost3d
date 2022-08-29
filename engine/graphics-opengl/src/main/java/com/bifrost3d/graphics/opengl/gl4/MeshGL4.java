@@ -154,11 +154,11 @@ public class MeshGL4 extends Mesh {
         int bytesPerVertex = floatsPerVertex * Float.BYTES;
 
         int offset = 0;
-        offset = bindAndEnableVertexAttrib(EVertexStream.Position, offset, 3, bytesPerVertex, this.vertices);
-        offset = bindAndEnableVertexAttrib(EVertexStream.Color, offset, 4, bytesPerVertex, this.colors);
-        offset = bindAndEnableVertexAttrib(EVertexStream.Normal, offset, 3, bytesPerVertex, this.normals);
-        offset = bindAndEnableVertexAttrib(EVertexStream.Tangent, offset, 3, bytesPerVertex, this.tangents);
-        offset = bindAndEnableVertexAttrib(EVertexStream.BiNormal, offset, 3, bytesPerVertex, this.biNormal);
+        offset = bindAndEnableVertexAttrib(EVertexStream.POSITION, offset, 3, bytesPerVertex, this.vertices);
+        offset = bindAndEnableVertexAttrib(EVertexStream.COLOR, offset, 4, bytesPerVertex, this.colors);
+        offset = bindAndEnableVertexAttrib(EVertexStream.NORMAL, offset, 3, bytesPerVertex, this.normals);
+        offset = bindAndEnableVertexAttrib(EVertexStream.TANGENT, offset, 3, bytesPerVertex, this.tangents);
+        offset = bindAndEnableVertexAttrib(EVertexStream.BI_NORMAL, offset, 3, bytesPerVertex, this.biNormal);
         offset = bindAndEnableVertexAttrib(EVertexStream.UV, offset, 2, bytesPerVertex, this.uv);
         bindAndEnableVertexAttrib(EVertexStream.UV2, offset, 2, bytesPerVertex, this.uv2);
     }

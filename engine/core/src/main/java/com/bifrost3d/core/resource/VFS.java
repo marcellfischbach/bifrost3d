@@ -28,17 +28,17 @@ public abstract class VFS {
 
     private Optional<InputStream> openNullSafe(ResourceLocator locator) {
         switch (locator.getProtocol()) {
-            case Archive:
+            case ARCHIVE:
                 return openFileFromArchive(locator);
-            case File:
+            case FILE:
                 return openFileFromFileSystem(locator);
+
         }
         return Optional.empty();
     }
 
 
     private Optional<InputStream> openFileFromArchive(ResourceLocator locator) {
-        System.out.println(fileRootPath);
         return Optional.empty();
     }
 
@@ -52,14 +52,10 @@ public abstract class VFS {
     }
 
 
-    public static VFS instance = null;
+    private static final VFS instance = new VFS() {
+    };
 
     public static VFS instance() {
-        if (instance == null) {
-            instance = new VFS() {
-            };
-
-        }
         return instance;
     }
 

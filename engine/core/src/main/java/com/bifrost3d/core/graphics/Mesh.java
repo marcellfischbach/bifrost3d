@@ -145,37 +145,37 @@ public abstract class Mesh {
 
     private void validateNoVertices() {
         if (this.vertices == null) {
-            throw new InvalidMeshConfigurationException(InvalidMeshConfigurationException.Reason.NoVertices);
+            throw new InvalidMeshConfigurationException(InvalidMeshConfigurationException.Reason.NO_VERTICES);
         }
     }
 
     private void validateColorsSizeMatchingVertices(List<ColorRGBA> colors) {
         if (colors != null && colors.size() != this.vertices.size()) {
-            throw new InvalidMeshConfigurationException(InvalidMeshConfigurationException.Reason.ColorsNotMatchingVertices);
+            throw new InvalidMeshConfigurationException(InvalidMeshConfigurationException.Reason.COLORS_NOT_MATCHING_VERTICES);
         }
     }
 
     private void validateNormalsSizeMatchingVertices(List<Vector3f> normals) {
         if (normals != null && normals.size() != this.vertices.size()) {
-            throw new InvalidMeshConfigurationException(InvalidMeshConfigurationException.Reason.NormalsNotMatchingVertices);
+            throw new InvalidMeshConfigurationException(InvalidMeshConfigurationException.Reason.NORMALS_NOT_MATCHING_VERTICES);
         }
     }
 
     private void validTangentsSizeMatchingVertices(List<Vector3f> tangents) {
         if (tangents != null && tangents.size() != this.vertices.size()) {
-            throw new InvalidMeshConfigurationException(InvalidMeshConfigurationException.Reason.TangentsNotMatchingVertices);
+            throw new InvalidMeshConfigurationException(InvalidMeshConfigurationException.Reason.TANGENTS_NOT_MATCHING_VERTICES);
         }
     }
 
     private void validBiNormalsSizeMatchingVertices(List<Vector3f> biNormal) {
         if (biNormal != null && biNormal.size() != this.vertices.size()) {
-            throw new InvalidMeshConfigurationException(InvalidMeshConfigurationException.Reason.BiNormalsNotMatchingVertices);
+            throw new InvalidMeshConfigurationException(InvalidMeshConfigurationException.Reason.BI_NORMALS_NOT_MATCHING_VERTICES);
         }
     }
 
     private void validUVSizeMatchingVertices(List<Vector2f> uv) {
         if (uv != null && uv.size() != this.vertices.size()) {
-            throw new InvalidMeshConfigurationException(InvalidMeshConfigurationException.Reason.UvsNotMatchingVertices);
+            throw new InvalidMeshConfigurationException(InvalidMeshConfigurationException.Reason.UVS_NOT_MATCHING_VERTICES);
         }
     }
 

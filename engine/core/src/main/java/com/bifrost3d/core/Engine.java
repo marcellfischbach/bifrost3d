@@ -1,7 +1,5 @@
 package com.bifrost3d.core;
 
-import java.util.ServiceLoader;
-
 public class Engine {
 
     private Engine () {

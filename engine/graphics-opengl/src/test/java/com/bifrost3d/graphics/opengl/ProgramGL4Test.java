@@ -39,7 +39,7 @@ class ProgramGL4Test extends GL4TestBase {
         ShaderGL4 vertex = null;
         ShaderGL4 fragment = null;
         try {
-            vertex = createShader(EShaderType.Vertex, "\n" +
+            vertex = createShader(EShaderType.VERTEX, "\n" +
                     "#version 330\n" +
                     "out vec4 value;\n" +
                     "void main()\n" +
@@ -47,7 +47,7 @@ class ProgramGL4Test extends GL4TestBase {
                     "   value = vec4(1, 1, 1, 1);\n" +
                     "   gl_Position = vec4(0, 0, 0, 1);\n" +
                     "}\n");
-            fragment = createShader(EShaderType.Fragment, "\n" +
+            fragment = createShader(EShaderType.FRAGMENT, "\n" +
                     "#version 330\n" +
                     "in vec4 value;\n" +
                     "void main()\n" +
@@ -85,7 +85,7 @@ class ProgramGL4Test extends GL4TestBase {
         ShaderGL4 vertex = null;
         ShaderGL4 fragment = null;
         try {
-            vertex = createShader(EShaderType.Vertex, "\n" +
+            vertex = createShader(EShaderType.VERTEX, "\n" +
                     "#version 330\n" +
                     "out mat4 value;\n" +
                     "void main()\n" +
@@ -96,7 +96,7 @@ class ProgramGL4Test extends GL4TestBase {
                     "                vec4(0, 0, 0, 1));\n" +
                     "   gl_Position = vec4(0, 0, 0, 1);\n" +
                     "}\n");
-            fragment = createShader(EShaderType.Fragment, "\n" +
+            fragment = createShader(EShaderType.FRAGMENT, "\n" +
                     "#version 330\n" +
                     "in vec4 value;\n" +
                     "void main()\n" +

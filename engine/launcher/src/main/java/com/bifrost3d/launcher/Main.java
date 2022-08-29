@@ -59,7 +59,7 @@ public class Main {
                 "   gl_Position = bf_Position;" +
                 "   color = vec4(0.0, 0.0, 0.5, 1.0);" +
                 "}";
-        IShader shader = graphics.createShader(EShaderType.Vertex);
+        IShader shader = graphics.createShader(EShaderType.VERTEX);
         shader.setSource(source);
         shader.compile();
         return shader;
@@ -78,7 +78,7 @@ public class Main {
                 "   gl_FragColor = color;" +
                 "}";
 
-        IShader shader = graphics.createShader(EShaderType.Fragment);
+        IShader shader = graphics.createShader(EShaderType.FRAGMENT);
         shader.setSource(source);
         shader.compile();
         return shader;
@@ -116,12 +116,12 @@ public class Main {
             window.swap();
 
 
-            if (mouse.isDown(EMouseButton.MB_Right)) {
-                mouse.setCursorMode(ECursorMode.Locked);
+            if (mouse.isDown(EMouseButton.MB_RIGHT)) {
+                mouse.setCursorMode(ECursorMode.LOCKED);
             } else {
-                mouse.setCursorMode(ECursorMode.Normal);
+                mouse.setCursorMode(ECursorMode.NORMAL);
             }
-            if (keyboard.isPressed(EKey.K_Escape)) {
+            if (keyboard.isPressed(EKey.K_ESCAPE)) {
                 running = false;
             }
         }

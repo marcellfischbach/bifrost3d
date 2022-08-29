@@ -38,8 +38,6 @@ public class ModuleGL4 extends AbstractModule{
     public void initialize(Engine engine) {
         LOGGER.info("Initialize");
 
-        ObjectRegistry.get(IGraphics.class, GraphicsGL4.class).ifPresent(device -> {
-            device.initialize();
-        });
+        ObjectRegistry.get(IGraphics.class, GraphicsGL4.class).ifPresent(GraphicsGL4::initialize);
     }
 }

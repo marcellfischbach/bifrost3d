@@ -28,7 +28,7 @@ public class EngineBootstrapper {
             }
             if (!oneModuleFound) {
                 if (!allModules.isEmpty()) {
-                    throw new RuntimeException("Cyclic dependencies found");
+                    throw new CyclicDependencyException();
                 }
                 return;
             }

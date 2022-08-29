@@ -4,9 +4,9 @@ import lombok.Getter;
 
 public final class ResourceLocator {
     public enum Protocol {
-        File("file://"),
-        Archive("archive://"),
-        Local(":");
+        FILE("file://"),
+        ARCHIVE("archive://"),
+        LOCAL(":");
 
         Protocol(String value) {
             this.value = value;

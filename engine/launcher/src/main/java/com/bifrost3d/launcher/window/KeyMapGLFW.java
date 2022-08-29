@@ -8,7 +8,7 @@ public abstract class KeyMapGLFW {
     private KeyMapGLFW() {
     }
 
-    public static final EKey[] map = new EKey[GLFW_KEY_LAST + 1];
+    protected static final EKey[] map = new EKey[GLFW_KEY_LAST + 1];
 
     static {
         register(GLFW_KEY_A, EKey.K_A);
@@ -47,13 +47,13 @@ public abstract class KeyMapGLFW {
         register(GLFW_KEY_8, EKey.K_8);
         register(GLFW_KEY_9, EKey.K_9);
         register(GLFW_KEY_0, EKey.K_0);
-        register(GLFW_KEY_LEFT_CONTROL, EKey.K_LeftControl);
-        register(GLFW_KEY_RIGHT_CONTROL, EKey.K_RightControl);
-        register(GLFW_KEY_LEFT_SHIFT, EKey.K_LeftShift);
-        register(GLFW_KEY_RIGHT_SHIFT, EKey.K_RightShift);
-        register(GLFW_KEY_ESCAPE, EKey.K_Escape);
-        register(GLFW_KEY_TAB, EKey.K_Tab);
-        register(GLFW_KEY_UP,  EKey.K_Up);
+        register(GLFW_KEY_LEFT_CONTROL, EKey.K_LEFT_CONTROL);
+        register(GLFW_KEY_RIGHT_CONTROL, EKey.K_RIGHT_CONTROL);
+        register(GLFW_KEY_LEFT_SHIFT, EKey.K_LEFT_SHIFT);
+        register(GLFW_KEY_RIGHT_SHIFT, EKey.K_RIGHT_SHIFT);
+        register(GLFW_KEY_ESCAPE, EKey.K_ESCAPE);
+        register(GLFW_KEY_TAB, EKey.K_TAB);
+        register(GLFW_KEY_UP,  EKey.K_UP);
     }
 
 

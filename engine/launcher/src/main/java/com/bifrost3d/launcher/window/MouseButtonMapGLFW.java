@@ -8,12 +8,12 @@ public abstract class MouseButtonMapGLFW {
     private MouseButtonMapGLFW() {
     }
 
-    public static final EMouseButton[] map = new EMouseButton[GLFW_MOUSE_BUTTON_LAST + 1];
+    protected static final EMouseButton[] map = new EMouseButton[GLFW_MOUSE_BUTTON_LAST + 1];
 
     static {
-        register(GLFW_MOUSE_BUTTON_LEFT, EMouseButton.MB_Left);
-        register(GLFW_MOUSE_BUTTON_MIDDLE, EMouseButton.MB_Middle);
-        register(GLFW_MOUSE_BUTTON_RIGHT, EMouseButton.MB_Right);
+        register(GLFW_MOUSE_BUTTON_LEFT, EMouseButton.MB_LEFT);
+        register(GLFW_MOUSE_BUTTON_MIDDLE, EMouseButton.MB_MIDDLE);
+        register(GLFW_MOUSE_BUTTON_RIGHT, EMouseButton.MB_RIGHT);
     }
 
 

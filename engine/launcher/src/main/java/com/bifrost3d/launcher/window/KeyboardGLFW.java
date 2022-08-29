@@ -6,6 +6,7 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class KeyboardGLFW  implements IKeyboard {
 
+    @SuppressWarnings("unused")
     public void update(long window, int key, int scancode, int action, int mods) {
         EKey eKey = KeyMapGLFW.map[key];
         if (eKey != null) {

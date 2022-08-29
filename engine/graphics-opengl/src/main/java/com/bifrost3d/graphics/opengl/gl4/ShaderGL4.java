@@ -55,17 +55,17 @@ public class ShaderGL4 implements IShader {
     private static int glShaderType(EShaderType type) {
         if (type != null) {
             switch (type) {
-                case Vertex:
+                case VERTEX:
                     return GL_VERTEX_SHADER;
-                case Control:
+                case TESS_CTRL:
                     return GL_TESS_CONTROL_SHADER;
-                case Eval:
+                case TESS_EVAL:
                     return GL_TESS_EVALUATION_SHADER;
-                case Geometry:
+                case GEOMETRY:
                     return GL_GEOMETRY_SHADER;
-                case Fragment:
+                case FRAGMENT:
                     return GL_FRAGMENT_SHADER;
-                case Compute:
+                case COMPUTE:
                     return GL_COMPUTE_SHADER;
             }
         }

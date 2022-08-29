@@ -27,7 +27,7 @@ public class MouseGLFW implements IMouse {
     private final boolean[] current = new boolean[EMouseButton.values().length];
     private final boolean[] prev = new boolean[EMouseButton.values().length];
 
-    private ECursorMode mode = ECursorMode.Normal;
+    private ECursorMode mode = ECursorMode.NORMAL;
 
     private final WindowGLFW window;
 
@@ -54,6 +54,7 @@ public class MouseGLFW implements IMouse {
         System.arraycopy(this.current, 0, this.prev, 0, this.current.length);
     }
 
+    @SuppressWarnings("unused")
     public void update(long window, int button, int action, int mods) {
         EMouseButton eButton = MouseButtonMapGLFW.map[button];
         if (eButton != null) {
@@ -65,25 +66,23 @@ public class MouseGLFW implements IMouse {
         }
     }
 
+    @SuppressWarnings("unused")
     public void update(long window, double xpos, double ypos) {
         this.realX = xpos;
         this.realY = ypos;
 
-        switch (this.mode) {
-            case Normal:
-                this.x = xpos;
-                this.y = ypos;
-                this.deltaX = this.realX - this.prevRealX;
-                this.deltaY = this.realY - this.prevRealY;
-                break;
-            case Locked:
-                this.deltaX = this.realX - this.prevRealX;
-                this.deltaY = this.realY - this.prevRealY;
-                this.x = this.prevX + this.deltaX;
-                this.y = this.prevY + this.deltaY;
-                this.x = Mathf.clamp(this.x, 0.0, this.window.getWidth());
-                this.y = Mathf.clamp(this.y, 0.0, this.window.getHeight());
-                break;
+        if (this.mode == ECursorMode.NORMAL) {
+            this.x = xpos;
+            this.y = ypos;
+            this.deltaX = this.realX - this.prevRealX;
+            this.deltaY = this.realY - this.prevRealY;
+        } else if (this.mode == ECursorMode.LOCKED) {
+            this.deltaX = this.realX - this.prevRealX;
+            this.deltaY = this.realY - this.prevRealY;
+            this.x = this.prevX + this.deltaX;
+            this.y = this.prevY + this.deltaY;
+            this.x = Mathf.clamp(this.x, 0.0, this.window.getWidth());
+            this.y = Mathf.clamp(this.y, 0.0, this.window.getHeight());
         }
     }
 
@@ -94,14 +93,10 @@ public class MouseGLFW implements IMouse {
         }
 
         this.mode = mode;
-        switch (this.mode) {
-            case Normal:
-                glfwSetInputMode(this.wnd, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-                break;
-
-            case Locked:
-                glfwSetInputMode(this.wnd, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-                break;
+        if (this.mode == ECursorMode.NORMAL) {
+            glfwSetInputMode(this.wnd, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        } else if (this.mode == ECursorMode.LOCKED) {
+            glfwSetInputMode(this.wnd, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
         }
 
         glfwSetCursorPos(this.wnd, window.getWidth() / 2.0, window.getHeight() / 2.0);

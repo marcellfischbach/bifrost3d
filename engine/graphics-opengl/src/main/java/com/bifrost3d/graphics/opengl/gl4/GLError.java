@@ -1,8 +1,13 @@
 package com.bifrost3d.graphics.opengl.gl4;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import static org.lwjgl.opengl.GL44.*;
 
 public abstract class GLError {
+
+    private static final Logger LOGGER = LogManager.getLogger(GLError.class);
 
     public static void check () {
         int error = glGetError();
@@ -14,28 +19,28 @@ public abstract class GLError {
         switch (error) 
         {
             case GL_INVALID_ENUM:
-                System.out.printf("[GL_INVALID_ENUM] @ %s.%s (%d)%n", stack.getClassName(), stack.getMethodName(), stack.getLineNumber());
+                LOGGER.error("[GL_INVALID_ENUM] @ {}.{} ({})", stack.getClassName(), stack.getMethodName(), stack.getLineNumber());
                 break;
             case GL_INVALID_VALUE:
-                System.out.printf("[GL_INVALID_VALUE] @ %s.%s (%d)%n", stack.getClassName(), stack.getMethodName(), stack.getLineNumber());
+                LOGGER.error("[GL_INVALID_VALUE] @ {}.{} ({})", stack.getClassName(), stack.getMethodName(), stack.getLineNumber());
                 break;
             case GL_INVALID_OPERATION:
-                System.out.printf("[GL_INVALID_OPERATION] @ %s.%s (%d)%n", stack.getClassName(), stack.getMethodName(), stack.getLineNumber());
+                LOGGER.error("[GL_INVALID_OPERATION] @ {}.{} ({})", stack.getClassName(), stack.getMethodName(), stack.getLineNumber());
                 break;
             case GL_INVALID_FRAMEBUFFER_OPERATION:
-                System.out.printf("[GL_INVALID_FRAMEBUFFER_OPERATION] @ %s.%s (%d)%n", stack.getClassName(), stack.getMethodName(), stack.getLineNumber());
+                LOGGER.error("[GL_INVALID_FRAMEBUFFER_OPERATION] @ {}.{} ({})", stack.getClassName(), stack.getMethodName(), stack.getLineNumber());
                 break;
             case GL_OUT_OF_MEMORY:
-                System.out.printf("[GL_OUT_OF_MEMORY] @ %s.%s (%d)%n", stack.getClassName(), stack.getMethodName(), stack.getLineNumber());
+                LOGGER.error("[GL_OUT_OF_MEMORY] @ {}.{} ({})", stack.getClassName(), stack.getMethodName(), stack.getLineNumber());
                 break;
             case GL_STACK_UNDERFLOW:
-                System.out.printf("[GL_STACK_UNDERFLOW] @ %s.%s (%d)%n", stack.getClassName(), stack.getMethodName(), stack.getLineNumber());
+                LOGGER.error("[GL_STACK_UNDERFLOW] @ {}.{} ({})", stack.getClassName(), stack.getMethodName(), stack.getLineNumber());
                 break;
             case GL_STACK_OVERFLOW:
-                System.out.printf("[GL_STACK_OVERFLOW] @ %s.%s (%d)%n", stack.getClassName(), stack.getMethodName(), stack.getLineNumber());
+                LOGGER.error("[GL_STACK_OVERFLOW] @ {}.{} ({})", stack.getClassName(), stack.getMethodName(), stack.getLineNumber());
                 break;
             default:
-                System.out.printf("[Unknown: 0x%08x] @ %s.%s (%d)%n", error, stack.getClassName(), stack.getMethodName(), stack.getLineNumber());
+                LOGGER.error("[Unknown: {}] @ {}.{} ({})", error, stack.getClassName(), stack.getMethodName(), stack.getLineNumber());
                 break;
         }
     }

@@ -154,7 +154,7 @@ class MeshTest {
             mesh.setVertices(vertices);
         });
         assertNotNull(exception);
-        assertEquals(InvalidMeshConfigurationException.Reason.NoVertices, exception.getReason());
+        assertEquals(InvalidMeshConfigurationException.Reason.NO_VERTICES, exception.getReason());
     }
 
     @Test
@@ -176,7 +176,7 @@ class MeshTest {
             mesh.setColors(colors);
         });
         assertNotNull(exception);
-        assertEquals(InvalidMeshConfigurationException.Reason.ColorsNotMatchingVertices, exception.getReason());
+        assertEquals(InvalidMeshConfigurationException.Reason.COLORS_NOT_MATCHING_VERTICES, exception.getReason());
     }
 
 
@@ -199,7 +199,7 @@ class MeshTest {
             mesh.setNormals(normals);
         });
         assertNotNull(exception);
-        assertEquals(InvalidMeshConfigurationException.Reason.NormalsNotMatchingVertices, exception.getReason());
+        assertEquals(InvalidMeshConfigurationException.Reason.NORMALS_NOT_MATCHING_VERTICES, exception.getReason());
     }
 
     @Test
@@ -221,7 +221,7 @@ class MeshTest {
             mesh.setTangents(tangents);
         });
         assertNotNull(exception);
-        assertEquals(InvalidMeshConfigurationException.Reason.TangentsNotMatchingVertices, exception.getReason());
+        assertEquals(InvalidMeshConfigurationException.Reason.TANGENTS_NOT_MATCHING_VERTICES, exception.getReason());
     }
 
 
@@ -244,7 +244,7 @@ class MeshTest {
             mesh.setBiNormal(biNormals);
         });
         assertNotNull(exception);
-        assertEquals(InvalidMeshConfigurationException.Reason.BiNormalsNotMatchingVertices, exception.getReason());
+        assertEquals(InvalidMeshConfigurationException.Reason.BI_NORMALS_NOT_MATCHING_VERTICES, exception.getReason());
     }
 
 
@@ -267,7 +267,7 @@ class MeshTest {
             mesh.setUv(uvs);
         });
         assertNotNull(exception);
-        assertEquals(InvalidMeshConfigurationException.Reason.UvsNotMatchingVertices, exception.getReason());
+        assertEquals(InvalidMeshConfigurationException.Reason.UVS_NOT_MATCHING_VERTICES, exception.getReason());
     }
 
 
@@ -290,7 +290,7 @@ class MeshTest {
             mesh.setUv2(uvs);
         });
         assertNotNull(exception);
-        assertEquals(InvalidMeshConfigurationException.Reason.UvsNotMatchingVertices, exception.getReason());
+        assertEquals(InvalidMeshConfigurationException.Reason.UVS_NOT_MATCHING_VERTICES, exception.getReason());
     }
 
     @Test
