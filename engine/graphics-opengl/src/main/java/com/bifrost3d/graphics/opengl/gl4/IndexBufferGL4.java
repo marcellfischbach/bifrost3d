@@ -12,7 +12,7 @@ public class IndexBufferGL4 extends BufferGL4 implements IIndexBuffer {
     }
 
     @Override
-    protected void applyGraphics() {
+    protected void setBufferInGraphics() {
         this.graphics.setIndexBuffer(this);
     }
 }

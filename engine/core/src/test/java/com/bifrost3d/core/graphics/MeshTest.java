@@ -3,6 +3,7 @@ package com.bifrost3d.core.graphics;
 import com.bifrost3d.math.ColorRGBA;
 import com.bifrost3d.math.Vector2f;
 import com.bifrost3d.math.Vector3f;
+import com.bifrost3d.math.Vector4f;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ class MeshTest {
     void testEmptyMeshReturnsData () {
         Mesh mesh = new MeshMock();
 
-        List<Vector3f> vertices = mesh.getVertices();
+        List<Vector4f> vertices = mesh.getVertices();
         assertNotNull(vertices);
         assertEquals(0, vertices.size());
 
@@ -58,6 +59,10 @@ class MeshTest {
         assertNotNull(uv2s);
         assertEquals(0, uv2s.size());
 
+        List<Integer> indices = mesh.getIndices();
+        assertNotNull(indices);
+        assertEquals(0, indices.size());
+
     }
 
 
@@ -65,10 +70,10 @@ class MeshTest {
     void testNonEmptyMeshReturnsNonEmptyData () {
         Mesh mesh = new MeshMock();
 
-        List<Vector3f> vertices = mesh.getVertices();
+        List<Vector4f> vertices = mesh.getVertices();
         assertEquals(0, vertices.size());
-        vertices.add(new Vector3f());
-        vertices.add(new Vector3f());
+        vertices.add(new Vector4f());
+        vertices.add(new Vector4f());
         mesh.setVertices(vertices);
         assertEquals(2, mesh.getVertices().size());
 
@@ -119,6 +124,13 @@ class MeshTest {
         assertEquals(2, mesh.getUv2().size());
 
 
+        List<Integer> indices = mesh.getIndices();
+        assertEquals(0, indices.size());
+        indices.add(0);
+        indices.add(1);
+        mesh.setIndices(indices);
+        assertEquals(2, mesh.getIndices().size());
+
     }
 
 
@@ -127,10 +139,10 @@ class MeshTest {
     void noVertices() {
 
         InvalidMeshConfigurationException exception = assertThrows(InvalidMeshConfigurationException.class, () -> {
-            List<Vector3f> vertices = new ArrayList<>();
-            vertices.add(new Vector3f());
-            vertices.add(new Vector3f());
-            vertices.add(new Vector3f());
+            List<Vector4f> vertices = new ArrayList<>();
+            vertices.add(new Vector4f());
+            vertices.add(new Vector4f());
+            vertices.add(new Vector4f());
 
             List<Vector3f> normals = new ArrayList<>();
             normals.add(new Vector3f());
@@ -142,17 +154,17 @@ class MeshTest {
             mesh.setVertices(vertices);
         });
         assertNotNull(exception);
-        assertEquals(exception.getReason(), InvalidMeshConfigurationException.Reason.NoVertices);
+        assertEquals(InvalidMeshConfigurationException.Reason.NoVertices, exception.getReason());
     }
 
     @Test
     void invalidColors() {
 
         InvalidMeshConfigurationException exception = assertThrows(InvalidMeshConfigurationException.class, () -> {
-            List<Vector3f> vertices = new ArrayList<>();
-            vertices.add(new Vector3f());
-            vertices.add(new Vector3f());
-            vertices.add(new Vector3f());
+            List<Vector4f> vertices = new ArrayList<>();
+            vertices.add(new Vector4f());
+            vertices.add(new Vector4f());
+            vertices.add(new Vector4f());
 
             List<ColorRGBA> colors = new ArrayList<>();
             colors.add(new ColorRGBA());
@@ -164,7 +176,7 @@ class MeshTest {
             mesh.setColors(colors);
         });
         assertNotNull(exception);
-        assertEquals(exception.getReason(), InvalidMeshConfigurationException.Reason.ColorsNotMatchingVertices);
+        assertEquals(InvalidMeshConfigurationException.Reason.ColorsNotMatchingVertices, exception.getReason());
     }
 
 
@@ -172,10 +184,10 @@ class MeshTest {
     void invalidNormals() {
 
         InvalidMeshConfigurationException exception = assertThrows(InvalidMeshConfigurationException.class, () -> {
-            List<Vector3f> vertices = new ArrayList<>();
-            vertices.add(new Vector3f());
-            vertices.add(new Vector3f());
-            vertices.add(new Vector3f());
+            List<Vector4f> vertices = new ArrayList<>();
+            vertices.add(new Vector4f());
+            vertices.add(new Vector4f());
+            vertices.add(new Vector4f());
 
             List<Vector3f> normals = new ArrayList<>();
             normals.add(new Vector3f());
@@ -187,17 +199,17 @@ class MeshTest {
             mesh.setNormals(normals);
         });
         assertNotNull(exception);
-        assertEquals(exception.getReason(), InvalidMeshConfigurationException.Reason.NormalsNotMatchingVertices);
+        assertEquals(InvalidMeshConfigurationException.Reason.NormalsNotMatchingVertices, exception.getReason());
     }
 
     @Test
     void invalidTangents() {
 
         InvalidMeshConfigurationException exception = assertThrows(InvalidMeshConfigurationException.class, () -> {
-            List<Vector3f> vertices = new ArrayList<>();
-            vertices.add(new Vector3f());
-            vertices.add(new Vector3f());
-            vertices.add(new Vector3f());
+            List<Vector4f> vertices = new ArrayList<>();
+            vertices.add(new Vector4f());
+            vertices.add(new Vector4f());
+            vertices.add(new Vector4f());
 
             List<Vector3f> tangents = new ArrayList<>();
             tangents.add(new Vector3f());
@@ -209,7 +221,7 @@ class MeshTest {
             mesh.setTangents(tangents);
         });
         assertNotNull(exception);
-        assertEquals(exception.getReason(), InvalidMeshConfigurationException.Reason.TangentsNotMatchingVertices);
+        assertEquals(InvalidMeshConfigurationException.Reason.TangentsNotMatchingVertices, exception.getReason());
     }
 
 
@@ -217,10 +229,10 @@ class MeshTest {
     void invalidBiNormals() {
 
         InvalidMeshConfigurationException exception = assertThrows(InvalidMeshConfigurationException.class, () -> {
-            List<Vector3f> vertices = new ArrayList<>();
-            vertices.add(new Vector3f());
-            vertices.add(new Vector3f());
-            vertices.add(new Vector3f());
+            List<Vector4f> vertices = new ArrayList<>();
+            vertices.add(new Vector4f());
+            vertices.add(new Vector4f());
+            vertices.add(new Vector4f());
 
             List<Vector3f> biNormals = new ArrayList<>();
             biNormals.add(new Vector3f());
@@ -232,7 +244,7 @@ class MeshTest {
             mesh.setBiNormal(biNormals);
         });
         assertNotNull(exception);
-        assertEquals(exception.getReason(), InvalidMeshConfigurationException.Reason.BiNormalsNotMatchingVertices);
+        assertEquals(InvalidMeshConfigurationException.Reason.BiNormalsNotMatchingVertices, exception.getReason());
     }
 
 
@@ -240,10 +252,10 @@ class MeshTest {
     void invalidUVs() {
 
         InvalidMeshConfigurationException exception = assertThrows(InvalidMeshConfigurationException.class, () -> {
-            List<Vector3f> vertices = new ArrayList<>();
-            vertices.add(new Vector3f());
-            vertices.add(new Vector3f());
-            vertices.add(new Vector3f());
+            List<Vector4f> vertices = new ArrayList<>();
+            vertices.add(new Vector4f());
+            vertices.add(new Vector4f());
+            vertices.add(new Vector4f());
 
             List<Vector2f> uvs = new ArrayList<>();
             uvs.add(new Vector2f());
@@ -255,7 +267,7 @@ class MeshTest {
             mesh.setUv(uvs);
         });
         assertNotNull(exception);
-        assertEquals(exception.getReason(), InvalidMeshConfigurationException.Reason.UvsNotMatchingVertices);
+        assertEquals(InvalidMeshConfigurationException.Reason.UvsNotMatchingVertices, exception.getReason());
     }
 
 
@@ -263,10 +275,10 @@ class MeshTest {
     void invalidUV2s() {
 
         InvalidMeshConfigurationException exception = assertThrows(InvalidMeshConfigurationException.class, () -> {
-            List<Vector3f> vertices = new ArrayList<>();
-            vertices.add(new Vector3f());
-            vertices.add(new Vector3f());
-            vertices.add(new Vector3f());
+            List<Vector4f> vertices = new ArrayList<>();
+            vertices.add(new Vector4f());
+            vertices.add(new Vector4f());
+            vertices.add(new Vector4f());
 
             List<Vector2f> uvs = new ArrayList<>();
             uvs.add(new Vector2f());
@@ -278,13 +290,13 @@ class MeshTest {
             mesh.setUv2(uvs);
         });
         assertNotNull(exception);
-        assertEquals(exception.getReason(), InvalidMeshConfigurationException.Reason.UvsNotMatchingVertices);
+        assertEquals(InvalidMeshConfigurationException.Reason.UvsNotMatchingVertices, exception.getReason());
     }
 
     @Test
     void testMeshSetupAllData() {
-        List<Vector3f> vertices = new ArrayList<>();
-        vertices.add(new Vector3f());
+        List<Vector4f> vertices = new ArrayList<>();
+        vertices.add(new Vector4f());
 
         List<ColorRGBA> colors = new ArrayList<>();
         colors.add(new ColorRGBA());

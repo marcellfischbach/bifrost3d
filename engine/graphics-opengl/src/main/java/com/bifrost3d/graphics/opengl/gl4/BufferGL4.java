@@ -17,7 +17,7 @@ abstract class BufferGL4 implements IBuffer {
     private final int name;
 
 
-    public BufferGL4(GraphicsGL4 graphics, int target, int mapAccess) {
+    protected BufferGL4(GraphicsGL4 graphics, int target, int mapAccess) {
         this.graphics = graphics;
         this.target = target;
         this.mapAccess = mapAccess;
@@ -25,76 +25,89 @@ abstract class BufferGL4 implements IBuffer {
         this.name = glGenBuffers();
     }
 
+    public void destroy () {
+        glDeleteBuffers(this.name);
+    }
+
     public void bind() {
         glBindBuffer(this.target, this.name);
     }
 
-    protected abstract void applyGraphics();
+    protected abstract void setBufferInGraphics();
 
 
     @Override
+    public void generateBuffer(long size) {
+        setBufferInGraphics();
+        glBufferData(this.target, size, this.mapAccess);
+    }
+
+    @Override
     public void copy(long offset, short[] data) {
-        applyGraphics();
+        setBufferInGraphics();
         glBufferSubData(this.target, offset, data);
     }
 
     @Override
     public void copy(long offset, int[] data) {
-        applyGraphics();
+        setBufferInGraphics();
         glBufferSubData(this.target, offset, data);
     }
 
     @Override
     public void copy(long offset, float[] data) {
-        applyGraphics();
+        GLError.check();
+        setBufferInGraphics();
+        GLError.check();
         glBufferSubData(this.target, offset, data);
+        GLError.check();
     }
 
     @Override
     public void copy(long offset, double[] data) {
-        applyGraphics();
+        setBufferInGraphics();
         glBufferSubData(this.target, offset, data);
     }
 
     @Override
     public void copy(long offset, ByteBuffer data) {
-        applyGraphics();
+        setBufferInGraphics();
         glBufferSubData(this.target, offset, data);
     }
 
     @Override
     public void copy(long offset, ShortBuffer data) {
-        applyGraphics();
+        setBufferInGraphics();
         glBufferSubData(this.target, offset, data);
     }
 
     @Override
     public void copy(long offset, IntBuffer data) {
-        applyGraphics();
+        setBufferInGraphics();
         glBufferSubData(this.target, offset, data);
     }
 
     @Override
     public void copy(long offset, FloatBuffer data) {
-        applyGraphics();
+        setBufferInGraphics();
         glBufferSubData(this.target, offset, data);
     }
 
     @Override
     public void copy(long offset, DoubleBuffer data) {
-        applyGraphics();
+        setBufferInGraphics();
         glBufferSubData(this.target, offset, data);
     }
 
     @Override
     public ByteBuffer map() {
-        applyGraphics();
+        setBufferInGraphics();
         return glMapBuffer(this.target, this.mapAccess);
     }
 
     @Override
     public void unmap() {
-        applyGraphics();
+        setBufferInGraphics();
         glUnmapBuffer(this.target);
     }
 }

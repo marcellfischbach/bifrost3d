@@ -3,6 +3,7 @@ package com.bifrost3d.core.graphics;
 import com.bifrost3d.math.ColorRGBA;
 import com.bifrost3d.math.Vector2f;
 import com.bifrost3d.math.Vector3f;
+import com.bifrost3d.math.Vector4f;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,29 +11,30 @@ import java.util.List;
 public abstract class Mesh {
 
 
-    private List<Vector3f> vertices = null;
-    private List<Vector3f> normals = null;
-    private List<ColorRGBA> colors = null;
-    private List<Vector3f> tangents = null;
-    private List<Vector3f> biNormal = null;
-    private List<Vector2f> uv = null;
-    private List<Vector2f> uv2 = null;
+    protected List<Vector4f> vertices = null;
+    protected List<Vector3f> normals = null;
+    protected List<ColorRGBA> colors = null;
+    protected List<Vector3f> tangents = null;
+    protected List<Vector3f> biNormal = null;
+    protected List<Vector2f> uv = null;
+    protected List<Vector2f> uv2 = null;
+
+    protected List<Integer> indices = null;
 
     protected Mesh() {
 
     }
 
+
     protected abstract void markGraphicsBuffersDirty();
 
 
-
-
-    public List<Vector3f> getVertices() {
+    public List<Vector4f> getVertices() {
         return wrap(vertices);
     }
 
 
-    public void setVertices(List<Vector3f> vertices) {
+    public void setVertices(List<Vector4f> vertices) {
 
         this.vertices = vertices;
 
@@ -84,7 +86,6 @@ public abstract class Mesh {
     }
 
 
-
     public List<Vector3f> getBiNormal() {
         return wrap(biNormal);
     }
@@ -131,7 +132,18 @@ public abstract class Mesh {
         return values != null ? values : new ArrayList<>();
     }
 
-    private void validateNoVertices () {
+
+    public List<Integer> getIndices() {
+        return wrap(indices);
+    }
+
+    public void setIndices(List<Integer> indices) {
+        this.indices = indices;
+
+        markGraphicsBuffersDirty();
+    }
+
+    private void validateNoVertices() {
         if (this.vertices == null) {
             throw new InvalidMeshConfigurationException(InvalidMeshConfigurationException.Reason.NoVertices);
         }
@@ -142,6 +154,7 @@ public abstract class Mesh {
             throw new InvalidMeshConfigurationException(InvalidMeshConfigurationException.Reason.ColorsNotMatchingVertices);
         }
     }
+
     private void validateNormalsSizeMatchingVertices(List<Vector3f> normals) {
         if (normals != null && normals.size() != this.vertices.size()) {
             throw new InvalidMeshConfigurationException(InvalidMeshConfigurationException.Reason.NormalsNotMatchingVertices);

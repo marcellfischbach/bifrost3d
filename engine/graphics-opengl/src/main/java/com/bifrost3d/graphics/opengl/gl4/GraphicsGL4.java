@@ -2,6 +2,7 @@ package com.bifrost3d.graphics.opengl.gl4;
 
 import com.bifrost3d.core.graphics.*;
 import com.bifrost3d.math.ColorRGBA;
+import com.bifrost3d.math.Matrix4f;
 import org.lwjgl.opengl.GL;
 
 import static org.lwjgl.opengl.GL44.*;
@@ -18,6 +19,33 @@ public class GraphicsGL4 implements IGraphics {
 
     private IndexBufferGL4 indexBuffer = null;
 
+
+    private final Matrix4f modelMatrix = new Matrix4f();
+    private final Matrix4f viewMatrix = new Matrix4f();
+    private final Matrix4f projectionMatrix = new Matrix4f();
+
+
+    private final Matrix4f viewModelMatrix = new Matrix4f();
+    private final Matrix4f projectionViewMatrix = new Matrix4f();
+    private final Matrix4f projectionViewModelMatrix = new Matrix4f();
+
+    private final Matrix4f modelMatrixInv = new Matrix4f();
+    private final Matrix4f viewMatrixInv = new Matrix4f();
+    private final Matrix4f projectionMatrixInv = new Matrix4f();
+    private final Matrix4f viewModelMatrixInv = new Matrix4f();
+    private final Matrix4f projectionViewMatrixInv = new Matrix4f();
+    private final Matrix4f projectionViewModelMatrixInv = new Matrix4f();
+
+    private boolean viewModeMatrixInvalid = true;
+    private boolean projectionViewMatrixInvalid = true;
+    private boolean projectionViewModelMatrixInvalid = true;
+    private boolean modelMatrixInvInvalid = true;
+    private boolean viewMatrixInvInvalid = true;
+    private boolean projectionMatrixInvInvalid = true;
+    private boolean viewModelMatrixInvInvalid = true;
+    private boolean projectionViewMatrixInvInvalid = true;
+    private boolean projectionViewModelMatrixInvInvalid = true;
+
     public void initialize() {
         GL.createCapabilities();
 
@@ -27,6 +55,10 @@ public class GraphicsGL4 implements IGraphics {
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         glClearDepth(1.0f);
         glClearStencil(0);
+
+        glFrontFace(GL_CW);
+        glCullFace(GL_BACK);
+        glEnable(GL_CULL_FACE);
     }
 
 
@@ -105,18 +137,24 @@ public class GraphicsGL4 implements IGraphics {
     }
 
     @Override
-    public IVertexBuffer createVertexBuffer() {
+    public VertexBufferGL4 createVertexBuffer() {
         return new VertexBufferGL4(this);
     }
 
     @Override
-    public IIndexBuffer createIndexBuffer() {
+    public IndexBufferGL4 createIndexBuffer() {
         return new IndexBufferGL4(this);
     }
 
     @Override
     public Mesh createMesh() {
         return new MeshGL4(this);
+    }
+
+    @Override
+    public void renderMesh(Mesh mesh) {
+        MeshGL4 meshGL4 = (MeshGL4) mesh;
+        meshGL4.render();
     }
 
     @Override
@@ -135,5 +173,140 @@ public class GraphicsGL4 implements IGraphics {
             this.indexBuffer = ib;
             this.indexBuffer.bind();
         }
+    }
+
+    @Override
+    public void setProgram(IProgram program) {
+        if (program != null) {
+            ProgramGL4 programGL4 = (ProgramGL4) program;
+            glUseProgram(programGL4.glName());
+        } else {
+            glUseProgram(0);
+        }
+    }
+
+
+    @Override
+    public void setModelMatrix(Matrix4f matrix) {
+        this.modelMatrix.set(matrix);
+
+        this.viewModeMatrixInvalid = true;
+        this.projectionViewModelMatrixInvalid = true;
+
+        this.modelMatrixInvInvalid = true;
+        this.viewModelMatrixInvInvalid = true;
+        this.projectionViewModelMatrixInvInvalid = true;
+    }
+
+    @Override
+    public void setViewMatrix(Matrix4f matrix) {
+        this.viewMatrix.set(matrix);
+
+        this.viewModeMatrixInvalid = true;
+        this.projectionViewMatrixInvalid = true;
+        this.projectionViewModelMatrixInvalid = true;
+
+        this.viewMatrixInvInvalid = true;
+        this.viewModelMatrixInvInvalid = true;
+        this.projectionViewMatrixInvInvalid = true;
+        this.projectionViewModelMatrixInvInvalid = true;
+
+    }
+
+    @Override
+    public void setProjectionMatrix(Matrix4f matrix) {
+        this.projectionMatrix.set(matrix);
+
+        this.projectionViewMatrixInvalid = true;
+        this.projectionViewModelMatrixInvalid = true;
+
+        this.projectionMatrixInvInvalid = true;
+        this.projectionViewMatrixInvInvalid = true;
+        this.projectionViewModelMatrixInvInvalid = true;
+
+    }
+
+    public Matrix4f getModelMatrix() {
+        return modelMatrix;
+    }
+
+    public Matrix4f getViewMatrix() {
+        return viewMatrix;
+    }
+
+    public Matrix4f getProjectionMatrix() {
+        return projectionMatrix;
+    }
+
+    public Matrix4f getViewModelMatrix() {
+        if (viewModeMatrixInvalid) {
+            Matrix4f.mul(viewMatrix, modelMatrix, viewModelMatrix);
+            viewModeMatrixInvalid = false;
+        }
+        return viewModelMatrix;
+    }
+
+    public Matrix4f getProjectionViewMatrix() {
+        if (projectionViewMatrixInvalid) {
+            Matrix4f.mul(projectionMatrix, viewMatrix, projectionViewMatrix);
+            projectionViewMatrixInvalid = false;
+        }
+        return projectionViewMatrix;
+    }
+
+    public Matrix4f getProjectionViewModelMatrix() {
+        if (projectionViewModelMatrixInvalid) {
+            Matrix4f.mul(getProjectionViewMatrix(), modelMatrix, projectionViewModelMatrix);
+            projectionViewModelMatrixInvalid = false;
+        }
+        return projectionViewModelMatrix;
+    }
+
+    public Matrix4f getModelMatrixInv() {
+        if (modelMatrixInvInvalid) {
+            this.modelMatrix.inverted(modelMatrixInv);
+            modelMatrixInvInvalid = false;
+        }
+        return modelMatrixInv;
+    }
+
+    public Matrix4f getViewMatrixInv() {
+        if (viewMatrixInvInvalid) {
+            this.viewMatrix.inverted(viewMatrixInv);
+            viewMatrixInvInvalid = false;
+        }
+        return viewMatrixInv;
+    }
+
+    public Matrix4f getProjectionMatrixInv() {
+        if (projectionMatrixInvInvalid) {
+            projectionMatrix.inverted(projectionMatrixInv);
+            projectionMatrixInvInvalid = false;
+        }
+        return projectionMatrixInv;
+    }
+
+    public Matrix4f getViewModelMatrixInv() {
+        if (viewModelMatrixInvInvalid) {
+            getViewModelMatrix().inverted(viewModelMatrixInv);
+            viewModelMatrixInvInvalid = false;
+        }
+        return viewModelMatrixInv;
+    }
+
+    public Matrix4f getProjectionViewMatrixInv() {
+        if (projectionViewMatrixInvInvalid) {
+            getProjectionViewMatrix().inverted(projectionViewMatrixInv);
+            projectionViewMatrixInvInvalid = false;
+        }
+        return projectionViewMatrixInv;
+    }
+
+    public Matrix4f getProjectionViewModelMatrixInv() {
+        if (projectionViewModelMatrixInvInvalid) {
+            getProjectionViewModelMatrix().inverted(projectionViewModelMatrixInv);
+            projectionViewModelMatrixInvInvalid = false;
+        }
+        return projectionViewModelMatrixInv;
     }
 }

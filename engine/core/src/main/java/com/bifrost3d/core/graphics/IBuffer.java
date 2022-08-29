@@ -4,6 +4,7 @@ import java.nio.*;
 
 public interface IBuffer {
 
+    void generateBuffer (long size);
 
     void copy(long offset, short[] data);
 

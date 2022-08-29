@@ -13,7 +13,7 @@ public class VertexBufferGL4 extends BufferGL4 implements IVertexBuffer {
     }
 
     @Override
-    protected void applyGraphics() {
+    protected void setBufferInGraphics() {
         this.graphics.setVertexBuffer(this);
     }
 }

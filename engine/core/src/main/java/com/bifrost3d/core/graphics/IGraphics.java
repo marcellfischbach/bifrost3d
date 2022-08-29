@@ -1,6 +1,7 @@
 package com.bifrost3d.core.graphics;
 
 import com.bifrost3d.math.ColorRGBA;
+import com.bifrost3d.math.Matrix4f;
 
 public interface IGraphics {
 
@@ -21,4 +22,11 @@ public interface IGraphics {
     void setIndexBuffer (IIndexBuffer indexBuffer);
 
     Mesh createMesh ();
+    void renderMesh (Mesh mesh);
+
+    void setProgram (IProgram program);
+
+    void setModelMatrix (Matrix4f matrix);
+    void setViewMatrix (Matrix4f matrix);
+    void setProjectionMatrix (Matrix4f matrix);
 }
