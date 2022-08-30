@@ -164,23 +164,59 @@ public class GraphicsGL4 implements IGraphics {
 
     private void bindMatrices () {
         if (this.program != null) {
-            bindMatrix(EShaderAttributeType.MODEL_MATRIX, getModelMatrix());
-            bindMatrix(EShaderAttributeType.VIEW_MATRIX, getViewMatrix());
-            bindMatrix(EShaderAttributeType.PROJECTION_MATRIX, getProjectionMatrix());
+            bindMatrix(EShaderAttributeType.MODEL_MATRIX);
+            bindMatrix(EShaderAttributeType.VIEW_MATRIX);
+            bindMatrix(EShaderAttributeType.PROJECTION_MATRIX);
 
-            bindMatrix(EShaderAttributeType.VIEW_MODEL_MATRIX, getViewModelMatrix());
-            bindMatrix(EShaderAttributeType.PROJECTION_VIEW_MATRIX, getProjectionViewMatrix());
-            bindMatrix(EShaderAttributeType.PROJECTION_VIEW_MODEL_MATRIX, getProjectionViewModelMatrix());
+            bindMatrix(EShaderAttributeType.VIEW_MODEL_MATRIX);
+            bindMatrix(EShaderAttributeType.PROJECTION_VIEW_MATRIX);
+            bindMatrix(EShaderAttributeType.PROJECTION_VIEW_MODEL_MATRIX);
         }
     }
 
-    private void bindMatrix (EShaderAttributeType type, Matrix4f matrix4f) {
-        GLError.check();
+    private void bindMatrix (EShaderAttributeType type) {
         IShaderAttribute attribute = this.program.getAttribute(type);
         if (attribute != null) {
-            attribute.bind(matrix4f);
+            switch (type) {
+
+                case MODEL_MATRIX:
+                    attribute.bind(getModelMatrix());
+                    break;
+                case VIEW_MATRIX:
+                    attribute.bind(getViewMatrix());
+                    break;
+                case PROJECTION_MATRIX:
+                    attribute.bind(getProjectionMatrix());
+                    break;
+                case VIEW_MODEL_MATRIX:
+                    attribute.bind(getViewModelMatrix());
+                    break;
+                case PROJECTION_VIEW_MATRIX:
+                    attribute.bind(getProjectionViewMatrix());
+                    break;
+                case PROJECTION_VIEW_MODEL_MATRIX:
+                    attribute.bind(getProjectionViewModelMatrix());
+                    break;
+                case MODEL_MATRIX_INV:
+                    attribute.bind(getModelMatrixInv());
+                    break;
+                case VIEW_MATRIX_INV:
+                    attribute.bind(getViewMatrixInv());
+                    break;
+                case PROJECTION_MATRIX_INV:
+                    attribute.bind(getProjectionMatrixInv());
+                    break;
+                case VIEW_MODEL_MATRIX_INV:
+                    attribute.bind(getViewModelMatrixInv());
+                    break;
+                case PROJECTION_VIEW_MATRIX_INV:
+                    attribute.bind(getProjectionViewMatrixInv());
+                    break;
+                case PROJECTION_VIEW_MODEL_MATRIX_INV:
+                    attribute.bind(getProjectionViewModelMatrixInv());
+                    break;
+            }
         }
-        GLError.check();
     }
 
     @Override

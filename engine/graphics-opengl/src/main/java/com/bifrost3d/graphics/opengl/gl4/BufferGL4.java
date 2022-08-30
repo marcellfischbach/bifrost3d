@@ -56,11 +56,8 @@ abstract class BufferGL4 implements IBuffer {
 
     @Override
     public void copy(long offset, float[] data) {
-        GLError.check();
         setBufferInGraphics();
-        GLError.check();
         glBufferSubData(this.target, offset, data);
-        GLError.check();
     }
 
     @Override

@@ -42,9 +42,7 @@ public class MeshGL4 extends Mesh {
         glBindVertexArray(this.vao);
 
         if (this.dirty) {
-            GLError.check();
             regenerateBuffers();
-            GLError.check();
         }
 
         glDrawElements(GL_TRIANGLES, this.indexBufferCount, this.indexBufferType, 0L);
@@ -53,15 +51,11 @@ public class MeshGL4 extends Mesh {
 
 
     private void regenerateBuffers() {
-        GLError.check();
 
         generateVertexBuffer();
-        GLError.check();
         generateIndexBuffer();
-        GLError.check();
 
         bindVertexBufferChannels();
-        GLError.check();
 
         this.dirty = false;
     }
@@ -85,16 +79,11 @@ public class MeshGL4 extends Mesh {
             vb.destroy();
             vb = null;
         }
-        GLError.check();
 
         vb = graphics.createVertexBuffer();
-        GLError.check();
         vb.bind();
-        GLError.check();
         vb.generateBuffer(vertexBuffer.length * (long) Float.BYTES);
-        GLError.check();
         vb.copy(0, vertexBuffer);
-        GLError.check();
 
     }
 

@@ -6,6 +6,7 @@ public enum EShaderAttributeFormat {
     VEC2,
     VEC3,
     VEC4,
+    COL4,
     MAT3,
     MAT4,
     TEXTURE,

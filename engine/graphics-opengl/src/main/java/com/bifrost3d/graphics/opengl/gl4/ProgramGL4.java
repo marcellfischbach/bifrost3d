@@ -3,10 +3,7 @@ package com.bifrost3d.graphics.opengl.gl4;
 import com.bifrost3d.core.graphics.*;
 import lombok.AllArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.lwjgl.opengl.GL44.*;
 
@@ -33,6 +30,11 @@ public class ProgramGL4 implements IProgram {
             glDeleteProgram(this.name);
             this.name = 0;
         }
+    }
+
+    @Override
+    public Set<String> namedAttributes() {
+        return new HashSet<>(this.namedAttributesMap.keySet());
     }
 
     @Override
