@@ -1,15 +1,23 @@
 package com.bifrost3d.graphics.opengl.gl4;
 
-import com.bifrost3d.core.graphics.EShaderAttributeType;
-import com.bifrost3d.core.graphics.IProgram;
-import com.bifrost3d.core.graphics.IShader;
-import com.bifrost3d.core.graphics.ProgramLinkException;
+import com.bifrost3d.core.graphics.*;
+import lombok.AllArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.lwjgl.opengl.GL44.*;
 
 public class ProgramGL4 implements IProgram {
 
     private int name;
+
+    private final ShaderAttributeGL4[] defaultAttributes = new ShaderAttributeGL4[EShaderAttributeType.values().length];
+
+    private final Map<String, ShaderAttributeGL4> namedAttributesMap = new HashMap<>();
+    private final List<NamedAttribute> namedAttributes = new ArrayList<>();
 
     public ProgramGL4() {
         this.name = glCreateProgram();
@@ -19,11 +27,63 @@ public class ProgramGL4 implements IProgram {
         return this.name;
     }
 
+
     public void delete() {
         if (this.name != 0) {
             glDeleteProgram(this.name);
             this.name = 0;
         }
+    }
+
+    @Override
+    public int indexOf(String attributeName) {
+        for (int i = 0; i < this.namedAttributes.size(); i++) {
+            NamedAttribute namedAttribute = this.namedAttributes.get(i);
+            if (attributeName.equals(namedAttribute.name)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    @Override
+    public IShaderAttribute getAttribute(int idx) {
+        if (idx < 0 || idx >= this.namedAttributes.size()) {
+            return null;
+        }
+        return this.namedAttributes.get(idx).attribute;
+    }
+
+    @Override
+    public int registerAttribute(String attributeName, EShaderAttributeFormat format) {
+        int idx = indexOf(attributeName);
+        if (idx != -1) {
+            return idx;
+        }
+
+        String attribteNameInSource = ConstGL4.SHADER_PREFIX + attributeName;
+        int loc = glGetUniformLocation(this.name, attribteNameInSource);
+        if (loc == -1) {
+            return -1;
+        }
+
+        idx = this.namedAttributes.size();
+        ShaderAttributeGL4 attribute = new ShaderAttributeGL4(format, loc);
+
+        namedAttributes.add(new NamedAttribute(attributeName, attribute));
+        namedAttributesMap.put(attributeName, attribute);
+
+        return idx;
+    }
+
+    @Override
+    public ShaderAttributeGL4 getAttribute(String attributeName) {
+        return namedAttributesMap.get(attributeName);
+    }
+
+    @Override
+    public IShaderAttribute getAttribute(EShaderAttributeType type) {
+        return this.defaultAttributes[type.ordinal()];
     }
 
     @Override
@@ -41,19 +101,28 @@ public class ProgramGL4 implements IProgram {
             throw new ProgramLinkException(log);
         }
 
-        registerDefaultAttributes ();
+        registerDefaultAttributes();
     }
 
-    private void registerDefaultAttributes () {
+    private void registerDefaultAttributes() {
 
         for (EShaderAttributeType value : EShaderAttributeType.values()) {
             String attribName = value.attributeName;
 
-            int loc = glGetAttribLocation(this.name, ConstGL4.SHADER_PREFIX + attribName);
+            int loc = glGetUniformLocation(this.name, ConstGL4.SHADER_PREFIX + attribName);
             if (loc != -1) {
-
+                this.defaultAttributes[value.ordinal()] = new ShaderAttributeGL4(value.format, loc);
+            } else {
+                this.defaultAttributes[value.ordinal()] = null;
             }
         }
+    }
+
+
+    @AllArgsConstructor
+    private static class NamedAttribute {
+        public final String name;
+        public final ShaderAttributeGL4 attribute;
 
 
     }

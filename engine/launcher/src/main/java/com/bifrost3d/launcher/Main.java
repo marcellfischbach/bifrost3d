@@ -5,6 +5,7 @@ import com.bifrost3d.core.ObjectRegistry;
 import com.bifrost3d.core.graphics.*;
 import com.bifrost3d.core.window.*;
 import com.bifrost3d.math.ColorRGBA;
+import com.bifrost3d.math.Matrix4f;
 import com.bifrost3d.math.Vector4f;
 
 import java.util.List;
@@ -31,6 +32,14 @@ public class Main {
         indices.add(0);
         indices.add(3);
         indices.add(2);
+
+        indices.add(0);
+        indices.add(3);
+        indices.add(1);
+        indices.add(0);
+        indices.add(2);
+        indices.add(3);
+
         mesh.setIndices(indices);
 
 
@@ -42,6 +51,8 @@ public class Main {
         program.attach(createVertexShader(graphics));
         program.attach(createFragmentShader(graphics));
         program.link();
+
+        program.registerAttribute("DiffuseColor", EShaderAttributeFormat.VEC4);
         return program;
     }
 
@@ -52,12 +63,17 @@ public class Main {
                 "" +
                 "layout(location = 0) in vec4 bf_Position;" +
                 "" +
+                "uniform mat4 bf_ModelMatrix;" +
+                "uniform mat4 bf_ProjectionMatrix;" +
+                "uniform mat4 bf_ProjectionViewModelMatrix;" +
+                "" +
                 "out vec4 color;" +
                 "" +
                 "void main ()" +
                 "{" +
-                "   gl_Position = bf_Position;" +
-                "   color = vec4(0.0, 0.0, 0.5, 1.0);" +
+                "   gl_Position = bf_ProjectionMatrix * bf_ModelMatrix * bf_Position;" +
+                "   gl_Position = bf_ProjectionViewModelMatrix * bf_Position;" +
+                "   color = vec4(1.0, 1.0, 1.0, 1.0);" +
                 "}";
         IShader shader = graphics.createShader(EShaderType.VERTEX);
         shader.setSource(source);
@@ -69,13 +85,15 @@ public class Main {
         String source = "" +
                 "#version 330\n" +
                 "" +
-                //"layout(location = 0) out vec4 bf_FragColor;" +
+                "layout(location = 0) out vec4 bf_FragColor;" +
+                "" +
+                "uniform vec4 bf_DiffuseColor;" +
                 "" +
                 "in vec4 color;" +
                 "" +
                 "void main ()" +
                 "{" +
-                "   gl_FragColor = color;" +
+                "   bf_FragColor = color * bf_DiffuseColor;" +
                 "}";
 
         IShader shader = graphics.createShader(EShaderType.FRAGMENT);
@@ -97,6 +115,22 @@ public class Main {
 
         Mesh mesh = generateMesh(graphics);
         IProgram program = createProgram(graphics);
+        int diffuseColorIdx = program.indexOf("DiffuseColor");
+
+        Matrix4f mat = new Matrix4f();
+        Matrix4f matT = new Matrix4f();
+        Matrix4f matX = new Matrix4f();
+        Matrix4f matY = new Matrix4f();
+        Matrix4f matZ = new Matrix4f();
+
+        float aspect = (float)window.getHeight() / (float)window.getWidth();
+        Matrix4f projMat = Matrix4f.projection(-1.0f, 1.0f, -aspect, aspect, 1.0f, 1024.0f);
+
+
+        graphics.setProjectionMatrix(projMat);
+        float redValue = 0.0f;
+        boolean redValueUp = true;
+        float rotValue = 0.0f;
 
         boolean running = true;
         while (running) {
@@ -108,9 +142,20 @@ public class Main {
 
             window.handleEvents();
 
-            graphics.clear(true, new ColorRGBA(0.5f, 0.0f, 0.0f, 1.0f), true, 1.0f, true, 0);
+            graphics.clear(true, new ColorRGBA(1.0f, 1.0f, 1.0f, 1.0f), true, 1.0f, true, 0);
 
+            Matrix4f.translation(0.0f, 0.0f, -5.0f, matT);
+            Matrix4f.rotationY(rotValue, matY);
+
+            Matrix4f.mul(matT, matY, mat);
+
+            graphics.setModelMatrix(mat);
             graphics.setProgram(program);
+            IShaderAttribute attribute = program.getAttribute(diffuseColorIdx);
+            if (attribute != null) {
+                attribute.bind(redValue, 0.0f, 1.0f - redValue, 1.0f);
+            }
+
             graphics.renderMesh(mesh);
 
             window.swap();
@@ -124,6 +169,23 @@ public class Main {
             if (keyboard.isPressed(EKey.K_ESCAPE)) {
                 running = false;
             }
+
+            if (redValueUp) {
+                redValue += 0.01f;
+                if (redValue > 1.0f) {
+                    redValue = 1.0f;
+                    redValueUp = false;
+                }
+            }
+            else {
+                redValue -= 0.01f;
+                if (redValue < 0.0f) {
+                    redValue = 0.0f;
+                    redValueUp = true;
+                }
+
+            }
+            rotValue += 0.025f;
         }
     }
 

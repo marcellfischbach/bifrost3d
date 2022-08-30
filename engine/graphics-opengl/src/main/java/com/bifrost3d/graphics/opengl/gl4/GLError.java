@@ -47,7 +47,7 @@ public abstract class GLError {
 
 
     private static StackTraceElement getStack () {
-        return Thread.currentThread().getStackTrace()[2];
+        return Thread.currentThread().getStackTrace()[3];
     }
 
     private GLError () {

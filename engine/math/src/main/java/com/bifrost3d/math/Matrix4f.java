@@ -77,7 +77,7 @@ public final class Matrix4f {
         m33 = 1.0f;
     }
 
-    public void set (Matrix4f other) {
+    public void set(Matrix4f other) {
         this.m00 = other.m00;
         this.m01 = other.m01;
         this.m02 = other.m02;
@@ -98,6 +98,30 @@ public final class Matrix4f {
         this.m32 = other.m32;
         this.m33 = other.m33;
     }
+
+    public void writeToBuffer(float[] buffer, int offset) {
+        buffer[offset] = this.m00;
+        buffer[offset + 1] = this.m01;
+        buffer[offset + 2] = this.m02;
+        buffer[offset + 3] = this.m03;
+
+        buffer[offset + 4] = this.m10;
+        buffer[offset + 5] = this.m11;
+        buffer[offset + 6] = this.m12;
+        buffer[offset + 7] = this.m13;
+
+        buffer[offset + 8] = this.m20;
+        buffer[offset + 9] = this.m21;
+        buffer[offset + 10] = this.m22;
+        buffer[offset + 11] = this.m23;
+
+        buffer[offset + 12] = this.m30;
+        buffer[offset + 13] = this.m31;
+        buffer[offset + 14] = this.m32;
+        buffer[offset + 15] = this.m33;
+
+    }
+
 
     public Vector4f getXAxis() {
         return getXAxis(new Vector4f());
@@ -229,6 +253,10 @@ public final class Matrix4f {
         inverted(this);
     }
 
+    public Matrix4f transposed() {
+        return transposed(new Matrix4f());
+    }
+
     public Matrix4f transposed(Matrix4f r) {
         float lm00 = m00;
         float lm01 = m01;
@@ -343,6 +371,33 @@ public final class Matrix4f {
         return r;
     }
 
+
+    public static Matrix4f translation (float x, float y, float z) {
+        return translation(x, y, z, new Matrix4f());
+    }
+
+    public static Matrix4f translation (float x, float y, float z, Matrix4f r) {
+        r.m00 = 1.0f;
+        r.m01 = 0.0f;
+        r.m02 = 0.0f;
+        r.m03 = 0.0f;
+
+        r.m10 = 0.0f;
+        r.m11 = 1.0f;
+        r.m12 = 0.0f;
+        r.m13 = 0.0f;
+
+        r.m20 = 0.0f;
+        r.m21 = 0.0f;
+        r.m22 = 1.0f;
+        r.m23 = 0.0f;
+
+        r.m30 = x;
+        r.m31 = y;
+        r.m32 = z;
+        r.m33 = 1.0f;
+        return r;
+    }
 
     public static Matrix4f rotationX(float rad) {
         return rotationX(rad, new Matrix4f());
@@ -481,5 +536,44 @@ public final class Matrix4f {
         return r;
     }
 
+
+    public static Matrix4f projection (float l, float r, float b, float t, float n, float f) {
+        return projection(l, r, b, t, n, f, new Matrix4f());
+    }
+
+    public static Matrix4f projection (float l, float r, float b, float t, float n, float f, Matrix4f res) {
+
+        float n2 = n*2.0f;
+        float dx = r - l;
+        float dy = t - b;
+        float dz = f - n;
+
+        float sx = r + l;
+        float sy = t + b;
+        float sz = f + n;
+
+        res.m00 = n2 / dx;
+        res.m01 = 0.0f;
+        res.m02 = 0.0f;
+        res.m03 = 0.0f;
+
+        res.m10 = 0.0f;
+        res.m11 = n2 / dy;
+        res.m12 = 0.0f;
+        res.m13 = 0.0f;
+
+        res.m20 = sx / dx;
+        res.m21 = sy / dy;
+        res.m22 = -sz / dz;
+        res.m23 = -1.0f;
+
+        res.m30 = 0.0f;
+        res.m31 = 0.0f;
+        res.m32 = -2.0f * f * n / dz;
+        res.m33 = 0.0f;
+
+
+        return res;
+    }
 
 }

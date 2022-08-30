@@ -8,6 +8,9 @@ public interface IWindow {
     void setTitle (String title);
     String getTitle();
 
+    void setVSync (boolean vSync);
+    boolean isVSync ();
+
     void handleEvents();
     void swap ();
 

@@ -1,7 +1,5 @@
 package com.bifrost3d.core.graphics;
 
-import java.util.regex.Pattern;
-
 public enum EShaderAttributeType {
 
     MODEL_MATRIX(EShaderAttributeFormat.MAT4),
@@ -22,12 +20,6 @@ public enum EShaderAttributeType {
 
     EShaderAttributeType(EShaderAttributeFormat format) {
         this.attributeName = convert(name());
-        this.format = format;
-        System.out.println("Converted: " + this.attributeName);
-    }
-
-    EShaderAttributeType(String name, EShaderAttributeFormat format) {
-        this.attributeName = name;
         this.format = format;
     }
 

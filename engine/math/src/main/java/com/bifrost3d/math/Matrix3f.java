@@ -49,6 +49,20 @@ public final class Matrix3f {
         m22 = 1.0f;
     }
 
+    public void writeToBuffer (float[] buffer, int offset) {
+        buffer[offset] = this.m00;
+        buffer[offset+1] = this.m01;
+        buffer[offset+2] = this.m02;
+
+        buffer[offset+3] = this.m10;
+        buffer[offset+4] = this.m11;
+        buffer[offset+5] = this.m12;
+
+        buffer[offset+6] = this.m20;
+        buffer[offset+7] = this.m21;
+        buffer[offset+8] = this.m22;
+    }
+
     public Vector3f getXAxis() {
         return getXAxis(new Vector3f());
     }

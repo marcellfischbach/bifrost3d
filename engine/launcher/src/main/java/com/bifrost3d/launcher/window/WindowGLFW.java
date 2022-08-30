@@ -20,6 +20,7 @@ public class WindowGLFW implements IWindow {
     private final KeyboardGLFW keyboard = new KeyboardGLFW();
     private MouseGLFW mouse;
 
+    private boolean vSync = false;
 
     public void initialize() {
 
@@ -43,7 +44,12 @@ public class WindowGLFW implements IWindow {
         glfwSetCursorPosCallback(this.wnd, this.mouse::update);
 
         glfwMakeContextCurrent(this.wnd);
-//        glfwSwapInterval(1);
+
+        if (vSync) {
+            glfwSwapInterval(1);
+        } else {
+            glfwSwapInterval(0);
+        }
 
     }
 
@@ -79,6 +85,16 @@ public class WindowGLFW implements IWindow {
     @Override
     public String getTitle() {
         return null;
+    }
+
+    @Override
+    public boolean isVSync() {
+        return vSync;
+    }
+
+    @Override
+    public void setVSync(boolean vSync) {
+        this.vSync = vSync;
     }
 
     @Override

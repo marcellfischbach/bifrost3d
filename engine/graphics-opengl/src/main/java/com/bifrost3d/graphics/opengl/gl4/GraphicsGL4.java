@@ -5,6 +5,8 @@ import com.bifrost3d.math.ColorRGBA;
 import com.bifrost3d.math.Matrix4f;
 import org.lwjgl.opengl.GL;
 
+import java.util.Objects;
+
 import static org.lwjgl.opengl.GL44.*;
 
 public class GraphicsGL4 implements IGraphics {
@@ -19,6 +21,7 @@ public class GraphicsGL4 implements IGraphics {
 
     private IndexBufferGL4 indexBuffer = null;
 
+    private ProgramGL4 program = null;
 
     private final Matrix4f modelMatrix = new Matrix4f();
     private final Matrix4f viewMatrix = new Matrix4f();
@@ -153,8 +156,31 @@ public class GraphicsGL4 implements IGraphics {
 
     @Override
     public void renderMesh(Mesh mesh) {
+        bindMatrices ();
+
         MeshGL4 meshGL4 = (MeshGL4) mesh;
         meshGL4.render();
+    }
+
+    private void bindMatrices () {
+        if (this.program != null) {
+            bindMatrix(EShaderAttributeType.MODEL_MATRIX, getModelMatrix());
+            bindMatrix(EShaderAttributeType.VIEW_MATRIX, getViewMatrix());
+            bindMatrix(EShaderAttributeType.PROJECTION_MATRIX, getProjectionMatrix());
+
+            bindMatrix(EShaderAttributeType.VIEW_MODEL_MATRIX, getViewModelMatrix());
+            bindMatrix(EShaderAttributeType.PROJECTION_VIEW_MATRIX, getProjectionViewMatrix());
+            bindMatrix(EShaderAttributeType.PROJECTION_VIEW_MODEL_MATRIX, getProjectionViewModelMatrix());
+        }
+    }
+
+    private void bindMatrix (EShaderAttributeType type, Matrix4f matrix4f) {
+        GLError.check();
+        IShaderAttribute attribute = this.program.getAttribute(type);
+        if (attribute != null) {
+            attribute.bind(matrix4f);
+        }
+        GLError.check();
     }
 
     @Override
@@ -177,11 +203,17 @@ public class GraphicsGL4 implements IGraphics {
 
     @Override
     public void setProgram(IProgram program) {
+        if (Objects.equals(this.program, program)) {
+            return;
+        }
+
         if (program != null) {
             ProgramGL4 programGL4 = (ProgramGL4) program;
             glUseProgram(programGL4.glName());
+            this.program = programGL4;
         } else {
             glUseProgram(0);
+            this.program = null;
         }
     }
 

@@ -1,5 +1,8 @@
 package com.bifrost3d.core.graphics;
 
+import com.bifrost3d.math.Matrix3f;
+import com.bifrost3d.math.Matrix4f;
+
 public interface IShaderAttribute {
 
     EShaderAttributeFormat getFormat();
@@ -15,4 +18,7 @@ public interface IShaderAttribute {
     void bind (int x, int y);
     void bind (int x, int y, int z);
     void bind (int x, int y, int z, int w);
+
+    void bind (Matrix3f m);
+    void bind (Matrix4f m);
 }

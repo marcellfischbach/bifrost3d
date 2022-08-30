@@ -31,4 +31,8 @@ public abstract class ShaderAttribTypeMapGL4 {
         map[type.ordinal()] = name;
     }
 
+    private ShaderAttribTypeMapGL4 () {
+
+    }
+
 }
