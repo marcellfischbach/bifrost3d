@@ -143,7 +143,7 @@ public class MeshGL4 extends Mesh {
         int bytesPerVertex = floatsPerVertex * Float.BYTES;
 
         int offset = 0;
-        offset = bindAndEnableVertexAttrib(EVertexStream.POSITION, offset, 3, bytesPerVertex, this.vertices);
+        offset = bindAndEnableVertexAttrib(EVertexStream.POSITION, offset, 4, bytesPerVertex, this.vertices);
         offset = bindAndEnableVertexAttrib(EVertexStream.COLOR, offset, 4, bytesPerVertex, this.colors);
         offset = bindAndEnableVertexAttrib(EVertexStream.NORMAL, offset, 3, bytesPerVertex, this.normals);
         offset = bindAndEnableVertexAttrib(EVertexStream.TANGENT, offset, 3, bytesPerVertex, this.tangents);
@@ -154,6 +154,7 @@ public class MeshGL4 extends Mesh {
 
     private int bindAndEnableVertexAttrib(EVertexStream vertexStream, int offset, int size, int strideInBytes, List<?> buffer) {
         if (buffer != null) {
+            System.out.println("bind and enable vertex attribute (" + vertexStream + ", " + offset + ", " + size + ", " + strideInBytes + ")");
             glVertexAttribPointer(
                     vertexStream.ordinal(),
                     size,

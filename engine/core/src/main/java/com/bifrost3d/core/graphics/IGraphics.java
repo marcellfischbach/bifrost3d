@@ -18,7 +18,13 @@ public interface IGraphics {
     IVertexBuffer createVertexBuffer ();
     IIndexBuffer createIndexBuffer ();
 
+    ISampler createSampler();
+
+    void resetTextureUnits();
+    ITexture2D createTexture2D(Image image);
     ITexture2D createTexture2D(ITexture2D.Descriptor descriptor);
+
+    int bind(ITexture texture);
 
     void setVertexBuffer (IVertexBuffer vertexBuffer);
     void setIndexBuffer (IIndexBuffer indexBuffer);

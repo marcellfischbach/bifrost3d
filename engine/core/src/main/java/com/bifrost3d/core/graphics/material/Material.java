@@ -30,11 +30,13 @@ public class Material implements IMaterial {
         if (!bindProgram(graphics, pass)) {
             return;
         }
+        graphics.resetTextureUnits();
 
-        this.attributes.forEach(attrib -> bindAttribute(pass, attrib));
+        this.attributes.forEach(attrib -> bindAttribute(graphics, pass, attrib));
     }
 
     public boolean bindProgram(IGraphics graphics, ERenderPass pass) {
+
         IProgram program = this.programs[pass.ordinal()];
         if (program != null) {
             graphics.setProgram(program);
@@ -43,7 +45,7 @@ public class Material implements IMaterial {
         return false;
     }
 
-    public void bindAttribute(ERenderPass pass, Attribute attribute) {
+    public void bindAttribute(IGraphics graphics, ERenderPass pass, Attribute attribute) {
         IShaderAttribute shaderAttribute = attribute.attributes[pass.ordinal()];
         if (shaderAttribute == null) {
             return;
@@ -76,7 +78,12 @@ public class Material implements IMaterial {
                 shaderAttribute.bind(attribute.valueMat4);
                 break;
             case TEXTURE:
-                // TODO: Implement textures
+                if (attribute.texture != null) {
+                    int unit = graphics.bind(attribute.texture);
+                    if (unit != -1) {
+                        shaderAttribute.bind(unit);
+                    }
+                }
                 break;
         }
     }
@@ -117,6 +124,11 @@ public class Material implements IMaterial {
     }
 
     @Override
+    public void setAttributeTexture(int idx, ITexture texture) {
+        this.attributes.get(idx).texture = texture;
+    }
+
+    @Override
     public float getAttributeFloat(int idx) {
         return this.attributes.get(idx).valueFloat;
     }
@@ -151,6 +163,10 @@ public class Material implements IMaterial {
         return this.attributes.get(idx).valueMat4;
     }
 
+    @Override
+    public ITexture getAttributeTexture(int idx) {
+        return this.attributes.get(idx).texture;
+    }
 
     public void setProgram(ERenderPass pass, IProgram program) {
         programs[pass.ordinal()] = program;
@@ -204,6 +220,7 @@ public class Material implements IMaterial {
         ColorRGBA valueColor;
         Matrix3f valueMat3;
         Matrix4f valueMat4;
+        ITexture texture;
 
         public Attribute(String name, EShaderAttributeFormat format) {
             this.name = name;

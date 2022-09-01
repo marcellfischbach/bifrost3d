@@ -49,6 +49,11 @@ public class GraphicsGL4 implements IGraphics {
     private boolean projectionViewMatrixInvInvalid = true;
     private boolean projectionViewModelMatrixInvInvalid = true;
 
+    private int nextTextureUnit;
+    private final TextureGL4[] textures = new TextureGL4[ETextureUnit.values().length];
+    private final SamplerGL4[] samplers = new SamplerGL4[ETextureUnit.values().length];
+
+
     public void initialize() {
         GL.createCapabilities();
 
@@ -150,31 +155,116 @@ public class GraphicsGL4 implements IGraphics {
     }
 
     @Override
+    public ISampler createSampler() {
+        return new SamplerGL4();
+    }
+
+    @Override
+    public Texture2DGL4 createTexture2D(Image image) {
+        Texture2DGL4 texture = createTexture2D(new ITexture2D.Descriptor(
+                image.getPixelFormat(),
+                image.getWidth(),
+                image.getHeight(),
+                image.getLayerCount() > 1
+        ));
+        texture.setImage(image);
+        return texture;
+    }
+
+    @Override
+    public Texture2DGL4 createTexture2D(ITexture2D.Descriptor descriptor) {
+        return new Texture2DGL4(this, descriptor);
+    }
+
+
+    @Override
+    public void resetTextureUnits() {
+        this.nextTextureUnit = 0;
+    }
+
+    @Override
+    public int bind(ITexture texture) {
+
+        if (this.nextTextureUnit >= 15) {
+            return -1;
+        }
+        int unit = this.nextTextureUnit;
+        nextTextureUnit++;
+
+        bindTexture((TextureGL4) texture, unit);
+        return unit;
+    }
+
+    private void bindTexture (TextureGL4 texture, int unit) {
+
+        TextureGL4 currentTexture = this.textures[unit];
+        if (currentTexture != texture) {
+            glActiveTexture(unit);
+
+            if (needUnbind(currentTexture, texture)) {
+                currentTexture.unbind();
+            }
+
+            if (texture != null) {
+                bindSampler(texture.getSampler(), unit);
+                texture.bind();
+            }
+            this.textures[unit] = texture;
+        }
+    }
+
+    private static boolean needUnbind (TextureGL4 oldTexture, TextureGL4 newTexture) {
+        return oldTexture != null
+                && (newTexture == null || oldTexture.getTarget() != newTexture.getTarget());
+    }
+
+    private void bindSampler(SamplerGL4 sampler, int unit) {
+        if (this.samplers[unit] != sampler) {
+            this.samplers[unit] = sampler;
+            if (sampler != null) {
+                sampler.bind(unit);
+            }
+            else {
+                glBindSampler(unit, 0);
+            }
+        }
+    }
+
+    public void bindTemp(ITexture2D texture) {
+        Texture2DGL4 textureGL4 = (Texture2DGL4) texture;
+
+        glActiveTexture(16);
+        bindSampler(textureGL4.getSampler(), 16);
+        textureGL4.bind();
+    }
+
+    @Override
     public Mesh createMesh() {
         return new MeshGL4(this);
     }
 
     @Override
     public void renderMesh(Mesh mesh) {
-        bindMatrices ();
+        bindMatrices();
 
         MeshGL4 meshGL4 = (MeshGL4) mesh;
         meshGL4.render();
     }
 
-    private void bindMatrices () {
+    private void bindMatrices() {
         if (this.program != null) {
             bindMatrix(EShaderAttributeType.MODEL_MATRIX);
             bindMatrix(EShaderAttributeType.VIEW_MATRIX);
             bindMatrix(EShaderAttributeType.PROJECTION_MATRIX);
 
             bindMatrix(EShaderAttributeType.VIEW_MODEL_MATRIX);
+
             bindMatrix(EShaderAttributeType.PROJECTION_VIEW_MATRIX);
             bindMatrix(EShaderAttributeType.PROJECTION_VIEW_MODEL_MATRIX);
         }
     }
 
-    private void bindMatrix (EShaderAttributeType type) {
+    private void bindMatrix(EShaderAttributeType type) {
         IShaderAttribute attribute = this.program.getAttribute(type);
         if (attribute != null) {
             switch (type) {

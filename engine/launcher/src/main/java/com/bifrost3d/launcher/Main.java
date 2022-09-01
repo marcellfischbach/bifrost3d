@@ -4,10 +4,10 @@ import com.bifrost3d.core.Engine;
 import com.bifrost3d.core.ObjectRegistry;
 import com.bifrost3d.core.graphics.*;
 import com.bifrost3d.core.graphics.material.Material;
-import com.bifrost3d.core.graphics.material.MaterialInstance;
 import com.bifrost3d.core.window.*;
 import com.bifrost3d.math.ColorRGBA;
 import com.bifrost3d.math.Matrix4f;
+import com.bifrost3d.math.Vector2f;
 import com.bifrost3d.math.Vector4f;
 
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.List;
 
 public class Main {
 
-    private static Mesh generateMesh(IGraphics graphics) {
+    private static Mesh generateMesh(IGraphics graphics, float textureStretch) {
 
         Mesh mesh = graphics.createMesh();
 
@@ -25,6 +25,13 @@ public class Main {
         vertices.add(new Vector4f(0.5f, -0.5f, 0.0f, 1.0f));
         vertices.add(new Vector4f(0.5f, 0.5f, 0.0f, 1.0f));
         mesh.setVertices(vertices);
+
+        List<Vector2f> uvs = mesh.getUv();
+        uvs.add(new Vector2f(0.0f, 0.0f));
+        uvs.add(new Vector2f(0.0f, textureStretch));
+        uvs.add(new Vector2f(textureStretch, 0.0f));
+        uvs.add(new Vector2f(textureStretch, textureStretch));
+        mesh.setUv(uvs);
 
 
         List<Integer> indices = mesh.getIndices();
@@ -54,6 +61,7 @@ public class Main {
         program.attach(createFragmentShader(graphics));
         program.link();
 
+        program.registerAttribute("Diffuse", EShaderAttributeFormat.TEXTURE);
         program.registerAttribute("DiffuseColor", EShaderAttributeFormat.COL4);
         return program;
     }
@@ -64,18 +72,19 @@ public class Main {
                 "#version 330\n" +
                 "" +
                 "layout(location = 0) in vec4 bf_Position;" +
+                "layout(location = 5) in vec2 bf_UV;" +
                 "" +
                 "uniform mat4 bf_ModelMatrix;" +
                 "uniform mat4 bf_ProjectionMatrix;" +
-//                "uniform mat4 bf_ProjectionViewModelMatrix;" +
                 "" +
                 "out vec4 color;" +
+                "out vec2 uv;" +
                 "" +
                 "void main ()" +
                 "{" +
                 "   gl_Position = bf_ProjectionMatrix * bf_ModelMatrix * bf_Position;" +
-//                "   gl_Position = bf_ProjectionViewModelMatrix * bf_Position;" +
                 "   color = vec4(1.0, 1.0, 1.0, 1.0);" +
+                "   uv = bf_UV;" +
                 "}";
         IShader shader = graphics.createShader(EShaderType.VERTEX);
         shader.setSource(source);
@@ -90,12 +99,15 @@ public class Main {
                 "layout(location = 0) out vec4 bf_FragColor;" +
                 "" +
                 "uniform vec4 bf_DiffuseColor;" +
+                "uniform sampler2D bf_Diffuse;" +
                 "" +
                 "in vec4 color;" +
+                "in vec2 uv;" +
                 "" +
                 "void main ()" +
                 "{" +
-                "   bf_FragColor = color * bf_DiffuseColor;" +
+                "   vec4 tex = texture(bf_Diffuse, uv);" +
+                "   bf_FragColor = tex * color * bf_DiffuseColor;" +
                 "}";
 
         IShader shader = graphics.createShader(EShaderType.FRAGMENT);
@@ -104,6 +116,37 @@ public class Main {
         return shader;
     }
 
+    private static Image createCheckerBoardImage(int size, int checkSize, int dither) {
+
+        byte[] buffer = new byte[size * size * 3];
+        int idx = 0;
+        for (int y = 0; y < size; y++) {
+            boolean oddY = ((y / checkSize) % 2) == 1;
+
+            for (int x = 0; x < size; x++) {
+                boolean oddX = ((x / checkSize) % 2) == 1;
+
+                boolean check = oddX == oddY;
+                byte value = check ? (byte) 0xff : (byte) 0x00;
+                byte rnd = (byte) (Math.random() * dither);
+                if (check) {
+                    value -= rnd;
+                }
+                else {
+                    value += rnd;
+                }
+
+                buffer[idx++] = value;
+                buffer[idx++] = value;
+                buffer[idx++] = value;
+            }
+        }
+
+        Image image = new Image(EPixelFormat.R8G8B8, size, size);
+        image.setImageData(buffer);
+        image.generateMipMaps(EMipMapGenerationMode.MIP_2X2);
+        return image;
+    }
 
     public static void main(String[] args) {
         Engine engine = Engine.create();
@@ -115,17 +158,28 @@ public class Main {
         IWindow window = ObjectRegistry.get(IWindow.class).orElseThrow(NullPointerException::new);
 
 
-        Mesh mesh = generateMesh(graphics);
+        Mesh mesh = generateMesh(graphics, 1);
         IProgram program = createProgram(graphics);
+
+
+        ISampler sampler = graphics.createSampler();
+        sampler.setFilter(ETextureFilter.ANISOTROPIC);
+        sampler.setAnisotropy(16);
+
+
+        Image image = createCheckerBoardImage(1024, 512, 128);
+
+        ITexture2D texture2d = graphics.createTexture2D(image);
+        texture2d.setSampler(sampler);
 
         Material material = new Material();
         material.setProgram(ERenderPass.FORWARD, program);
+
         int diffuseColorIdx = material.indexOf("DiffuseColor");
-        material.setAttributeColor(diffuseColorIdx, new ColorRGBA(0.0f, 1.0f, 0.0f, 1.0f));
+        int diffuseIdx = material.indexOf("Diffuse");
+        material.setAttributeColor(diffuseColorIdx, new ColorRGBA(1.0f, 1.0f, 1.0f, 1.0f));
+        material.setAttributeTexture(diffuseIdx, texture2d);
 
-
-        MaterialInstance matInstance = new MaterialInstance(material);
-        matInstance.setAttributeColor(diffuseColorIdx, new ColorRGBA(1.0f, 0.0f, 0.0f, 1.0f));
 
 
         Matrix4f mat = new Matrix4f();
@@ -144,6 +198,7 @@ public class Main {
         int fps = 0;
         boolean running = true;
         boolean override = false;
+        boolean animate = true;
         graphics.setClearColor(new ColorRGBA(0.0f, 0.0f, 0.5f, 1.0f));
         while (running) {
 //            sleep(1);
@@ -157,7 +212,7 @@ public class Main {
 
             graphics.clear(true, true, true);
 
-            Matrix4f.translation(0.0f, 0.0f, -5.0f, matT);
+            Matrix4f.translation(0.0f, 0.0f, -1.5f, matT);
             Matrix4f.rotationY(rotValue, matY);
 
             Matrix4f.mul(matT, matY, mat);
@@ -165,10 +220,7 @@ public class Main {
             graphics.setModelMatrix(mat);
             graphics.setProgram(program);
 
-            override = !override;
-            matInstance.setOverride(diffuseColorIdx, override);
-
-            matInstance.bind(graphics, ERenderPass.FORWARD);
+            material.bind(graphics, ERenderPass.FORWARD);
             graphics.renderMesh(mesh);
 
             window.swap();
@@ -182,9 +234,25 @@ public class Main {
             if (keyboard.isPressed(EKey.K_ESCAPE)) {
                 running = false;
             }
+            if (keyboard.isPressed(EKey.K_SPACE)) {
+                animate = !animate;
+            }
+            if (keyboard.isPressed(EKey.K_A)) {
+                if (sampler.getFilter() == ETextureFilter.MIN_MAG_MIP_LINEAR) {
+                    System.out.println("Set Anisotropic");
+                    sampler.setFilter(ETextureFilter.ANISOTROPIC);
+                    sampler.setAnisotropy(16);
+                }
+                else {
+                    System.out.println("Set TrippleFilter");
+                    sampler.setFilter(ETextureFilter.MIN_MAG_MIP_LINEAR);
+                    sampler.setAnisotropy(1);
+                }
+            }
 
-
-            rotValue += 0.025f;
+            if (animate) {
+                rotValue += 0.0125f;
+            }
         }
     }
 

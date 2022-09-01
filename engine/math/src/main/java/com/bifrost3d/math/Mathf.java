@@ -76,4 +76,14 @@ public abstract class Mathf {
         return (float) Math.sqrt(v);
     }
 
+
+    public static int numPowerOfTwo (int size) {
+        int num = 0;
+        while (size > 0) {
+            size >>= 1;
+            num++;
+        }
+        return num;
+    }
+
 }

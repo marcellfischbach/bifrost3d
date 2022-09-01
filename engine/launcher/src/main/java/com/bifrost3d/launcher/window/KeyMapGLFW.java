@@ -54,6 +54,7 @@ public abstract class KeyMapGLFW {
         register(GLFW_KEY_ESCAPE, EKey.K_ESCAPE);
         register(GLFW_KEY_TAB, EKey.K_TAB);
         register(GLFW_KEY_UP,  EKey.K_UP);
+        register(GLFW_KEY_SPACE,  EKey.K_SPACE);
     }
 
 

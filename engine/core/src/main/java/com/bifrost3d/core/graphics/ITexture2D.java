@@ -5,15 +5,20 @@ import lombok.NoArgsConstructor;
 
 public interface ITexture2D extends ITexture {
 
+    EPixelFormat getFormat ();
+    int getWidth();
+    int getHeight ();
+
+
+
     void setImage (Image image);
 
-    @NoArgsConstructor
     @AllArgsConstructor
     class Descriptor {
-        EPixelFormat format;
-        int width;
-        int height;
-        boolean mipmap;
+        public final EPixelFormat format;
+        public final int width;
+        public final int height;
+        public final boolean mipmap;
     }
 
 

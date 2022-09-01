@@ -2,6 +2,7 @@ package com.bifrost3d.core.graphics.material;
 
 import com.bifrost3d.core.graphics.ERenderPass;
 import com.bifrost3d.core.graphics.IGraphics;
+import com.bifrost3d.core.graphics.ITexture;
 import com.bifrost3d.math.*;
 
 import java.util.ArrayList;
@@ -67,6 +68,12 @@ public class MaterialInstance implements IMaterial {
     }
 
     @Override
+    public void setAttributeTexture(int idx, ITexture texture) {
+        this.attributes.get(idx).texture = texture;
+    }
+
+
+    @Override
     public float getAttributeFloat(int idx) {
         return this.attributes.get(idx).valueFloat;
     }
@@ -101,19 +108,25 @@ public class MaterialInstance implements IMaterial {
         return this.attributes.get(idx).valueMat4;
     }
 
+    @Override
+    public ITexture getAttributeTexture(int idx) {
+        return this.attributes.get(idx).texture;
+    }
+
     public void bind(IGraphics graphics, ERenderPass pass) {
         if (!material.bindProgram(graphics, pass)) {
             return;
         }
+        graphics.resetTextureUnits();
 
-        this.attributes.forEach(attrib -> bindAttribute(pass, attrib));
+        this.attributes.forEach(attrib -> bindAttribute(graphics, pass, attrib));
     }
 
-    public void bindAttribute(ERenderPass pass, Attribute attribute) {
+    public void bindAttribute(IGraphics graphics, ERenderPass pass, Attribute attribute) {
         if (attribute.override) {
-            material.bindAttribute(pass, attribute);
+            material.bindAttribute(graphics, pass, attribute);
         } else {
-            material.bindAttribute(pass, attribute.ref);
+            material.bindAttribute(graphics, pass, attribute.ref);
         }
     }
 
