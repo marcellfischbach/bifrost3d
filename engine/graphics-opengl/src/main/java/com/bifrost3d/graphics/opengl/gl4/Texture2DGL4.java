@@ -27,8 +27,7 @@ public class Texture2DGL4 extends TextureGL4 implements ITexture2D {
         this.height = descriptor.height;
         this.mipmap = descriptor.mipmap;
 
-
-//        initBuffers();
+        initBuffers();
     }
 
     @Override
@@ -47,9 +46,12 @@ public class Texture2DGL4 extends TextureGL4 implements ITexture2D {
     }
 
     private void initBuffers() {
-        int numLevelsWidth = Mathf.numPowerOfTwo(this.width);
-        int numLevelsHeight = Mathf.numPowerOfTwo(this.height);
-        int numLevels = Math.max(numLevelsWidth, numLevelsHeight);
+        int numLevels = 1;
+        if (this.mipmap) {
+            int numLevelsWidth = Mathf.numPowerOfTwo(this.width);
+            int numLevelsHeight = Mathf.numPowerOfTwo(this.height);
+            numLevels = Math.max(numLevelsWidth, numLevelsHeight);
+        }
 
         glTexStorage2D(
                 this.target,

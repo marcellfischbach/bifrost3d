@@ -31,7 +31,7 @@ public class SamplerGL4 implements ISampler {
         this.name = glGenSamplers();
         glSamplerParameteri(this.name, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
         glSamplerParameteri(this.name, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glSamplerParameterf(this.name, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, this.anisotropy);
+        glSamplerParameteri(this.name, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, this.anisotropy);
         glSamplerParameteri(this.name, GL_TEXTURE_MIN_LOD, this.minLOD);
         glSamplerParameteri(this.name, GL_TEXTURE_MAX_LOD, this.maxLOD);
         glSamplerParameteri(this.name, GL_TEXTURE_WRAP_S, TextureWrapMapGL4.map[this.textureWrapS.ordinal()]);
@@ -61,67 +61,67 @@ public class SamplerGL4 implements ISampler {
                 case MIN_MAG_NEAREST:
                     glSamplerParameteri(this.name, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
                     glSamplerParameteri(this.name, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-                    glSamplerParameterf(this.name, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, 1.0f);
+                    glSamplerParameteri(this.name, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, 1);
                     break;
                 case MIN_NEAREST_MAG_LINEAR:
                     glSamplerParameteri(this.name, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
                     glSamplerParameteri(this.name, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-                    glSamplerParameterf(this.name, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, 1.0f);
+                    glSamplerParameteri(this.name, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, 1);
                     break;
                 case MIN_LINEAR_MAG_NEAREST:
                     glSamplerParameteri(this.name, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
                     glSamplerParameteri(this.name, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-                    glSamplerParameterf(this.name, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, 1.0f);
+                    glSamplerParameteri(this.name, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, 1);
                     break;
                 case MIN_MAG_LINEAR:
                     glSamplerParameteri(this.name, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
                     glSamplerParameteri(this.name, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-                    glSamplerParameterf(this.name, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, 1.0f);
+                    glSamplerParameteri(this.name, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, 1);
                     break;
                 case MIN_MAG_MIP_NEAREST:
                     glSamplerParameteri(this.name, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
                     glSamplerParameteri(this.name, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-                    glSamplerParameterf(this.name, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, 1.0f);
+                    glSamplerParameteri(this.name, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, 1);
                     break;
                 case MIN_MAG_NEAREST_MIP_LINEAR:
                     glSamplerParameteri(this.name, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
                     glSamplerParameteri(this.name, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-                    glSamplerParameterf(this.name, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, 1.0f);
+                    glSamplerParameteri(this.name, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, 1);
                     break;
                 case MIN_NEAREST_MAG_LINEAR_MIP_NEAREST:
                     glSamplerParameteri(this.name, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
                     glSamplerParameteri(this.name, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-                    glSamplerParameterf(this.name, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, 1.0f);
+                    glSamplerParameteri(this.name, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, 1);
                     break;
                 case MIN_NEAREST_MAG_MIP_LINEAR:
                     glSamplerParameteri(this.name, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
                     glSamplerParameteri(this.name, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-                    glSamplerParameterf(this.name, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, 1.0f);
+                    glSamplerParameteri(this.name, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, 1);
                     break;
                 case MIN_LINEAR_MAG_MIP_NEAREST:
                     glSamplerParameteri(this.name, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
                     glSamplerParameteri(this.name, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-                    glSamplerParameterf(this.name, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, 1.0f);
+                    glSamplerParameteri(this.name, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, 1);
                     break;
                 case MIN_LINEAR_MAG_NEAREST_MIP_LINEAR:
                     glSamplerParameteri(this.name, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
                     glSamplerParameteri(this.name, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-                    glSamplerParameterf(this.name, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, 1.0f);
+                    glSamplerParameteri(this.name, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, 1);
                     break;
                 case MIN_MAG_LINEAR_MIP_NEAREST:
                     glSamplerParameteri(this.name, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
                     glSamplerParameteri(this.name, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-                    glSamplerParameterf(this.name, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, 1.0f);
+                    glSamplerParameteri(this.name, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, 1);
                     break;
                 case MIN_MAG_MIP_LINEAR:
                     glSamplerParameteri(this.name, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
                     glSamplerParameteri(this.name, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-                    glSamplerParameterf(this.name, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, 1.0f);
+                    glSamplerParameteri(this.name, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, 1);
                     break;
                 case ANISOTROPIC:
                     glSamplerParameteri(this.name, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
                     glSamplerParameteri(this.name, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-                    glSamplerParameterf(this.name, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, this.anisotropy);
+                    glSamplerParameteri(this.name, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, this.anisotropy);
                     break;
             }
         }
@@ -136,7 +136,7 @@ public class SamplerGL4 implements ISampler {
     public void setAnisotropy(int anisotropy) {
         if (this.anisotropy != anisotropy) {
             this.anisotropy = anisotropy;
-            glSamplerParameterf(this.name, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, this.anisotropy);
+            glSamplerParameteri(this.name, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, this.anisotropy);
         }
     }
 

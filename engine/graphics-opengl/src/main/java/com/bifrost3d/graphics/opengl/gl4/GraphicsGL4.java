@@ -63,6 +63,8 @@ public class GraphicsGL4 implements IGraphics {
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         glClearDepth(1.0f);
         glClearStencil(0);
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+        glPixelStorei(GL_PACK_ALIGNMENT, 1);
 
         glFrontFace(GL_CW);
         glCullFace(GL_BACK);

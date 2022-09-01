@@ -154,7 +154,6 @@ public class MeshGL4 extends Mesh {
 
     private int bindAndEnableVertexAttrib(EVertexStream vertexStream, int offset, int size, int strideInBytes, List<?> buffer) {
         if (buffer != null) {
-            System.out.println("bind and enable vertex attribute (" + vertexStream + ", " + offset + ", " + size + ", " + strideInBytes + ")");
             glVertexAttribPointer(
                     vertexStream.ordinal(),
                     size,

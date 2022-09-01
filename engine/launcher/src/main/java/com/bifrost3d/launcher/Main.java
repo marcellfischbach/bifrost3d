@@ -127,7 +127,7 @@ public class Main {
                 boolean oddX = ((x / checkSize) % 2) == 1;
 
                 boolean check = oddX == oddY;
-                byte value = check ? (byte) 0xff : (byte) 0x00;
+                byte value = check ? (byte) 0xef : (byte) 0x20;
                 byte rnd = (byte) (Math.random() * dither);
                 if (check) {
                     value -= rnd;
@@ -158,7 +158,7 @@ public class Main {
         IWindow window = ObjectRegistry.get(IWindow.class).orElseThrow(NullPointerException::new);
 
 
-        Mesh mesh = generateMesh(graphics, 1);
+        Mesh mesh = generateMesh(graphics, 8);
         IProgram program = createProgram(graphics);
 
 
@@ -167,7 +167,7 @@ public class Main {
         sampler.setAnisotropy(16);
 
 
-        Image image = createCheckerBoardImage(1024, 512, 128);
+        Image image = createCheckerBoardImage(1024, 512, 64);
 
         ITexture2D texture2d = graphics.createTexture2D(image);
         texture2d.setSampler(sampler);
@@ -197,11 +197,9 @@ public class Main {
         FPSCounter fpsCounter = new FPSCounter();
         int fps = 0;
         boolean running = true;
-        boolean override = false;
         boolean animate = true;
         graphics.setClearColor(new ColorRGBA(0.0f, 0.0f, 0.5f, 1.0f));
         while (running) {
-//            sleep(1);
             fpsCounter.tick();
             if (fps != fpsCounter.getFps()) {
                 fps = fpsCounter.getFps();
@@ -237,18 +235,7 @@ public class Main {
             if (keyboard.isPressed(EKey.K_SPACE)) {
                 animate = !animate;
             }
-            if (keyboard.isPressed(EKey.K_A)) {
-                if (sampler.getFilter() == ETextureFilter.MIN_MAG_MIP_LINEAR) {
-                    System.out.println("Set Anisotropic");
-                    sampler.setFilter(ETextureFilter.ANISOTROPIC);
-                    sampler.setAnisotropy(16);
-                }
-                else {
-                    System.out.println("Set TrippleFilter");
-                    sampler.setFilter(ETextureFilter.MIN_MAG_MIP_LINEAR);
-                    sampler.setAnisotropy(1);
-                }
-            }
+
 
             if (animate) {
                 rotValue += 0.0125f;
@@ -256,13 +243,7 @@ public class Main {
         }
     }
 
-    private static void sleep(long millis) {
-        try {
-            Thread.sleep(millis);
-        } catch (InterruptedException ie) {
-            Thread.currentThread().interrupt();
-        }
-    }
+
 
     private static class FPSCounter {
         private long nextTime;

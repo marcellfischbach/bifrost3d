@@ -4,7 +4,7 @@ import static org.lwjgl.opengl.GL11.*;
 
 public abstract class TextureCompareFuncMapGL4 {
 
-    public static final int[] map = new int[]{
+    protected static final int[] map = new int[]{
             GL_LEQUAL,
             GL_LESS,
             GL_GEQUAL,

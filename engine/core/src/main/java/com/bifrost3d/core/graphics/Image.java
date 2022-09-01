@@ -125,13 +125,14 @@ public class Image {
         int bottomLayerIdx = 1;
         while (top.width > 1 || top.height > 1) {
             Layer bottom = getLayer(bottomLayerIdx);
-            generate2X2MipMaps(top, bottom);
+            generateNormalMipMaps(top, bottom);
             top = bottom;
         }
     }
 
+    @SuppressWarnings("unused")
     private void generateNormalMipMaps(Layer top, Layer bottom) {
-
+        //
     }
 
     public int getLayerCount () {
@@ -176,6 +177,8 @@ public class Image {
             case R8G8B8:
             case R8G8B8A8:
                 return;
+            default:
+                break;
         }
 
         throw new IllegalPixelFormatException(pf);
@@ -188,16 +191,18 @@ public class Image {
                 return 3;
             case R8G8B8A8:
                 return 4;
+            default:
+                break;
         }
         return 0;
     }
 
 
+    @SuppressWarnings("java:S1104")
     public static class Layer {
         public int width;
         public int height;
         public byte[] bBuffer;
-        float[] fBuffer;
     }
 
 }

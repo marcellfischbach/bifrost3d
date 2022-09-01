@@ -183,14 +183,12 @@ public class Material implements IMaterial {
     private void updateAttribute(ERenderPass pass, IProgram program, String attributeName) {
         IShaderAttribute shaderAttribute = program.getAttribute(attributeName);
         if (shaderAttribute == null) {
-            // TODO: Throw exception here
-            return;
+            throw new AttributeNotFoundException(attributeName);
         }
 
         Attribute attribute = getAttributeByName(attributeName);
         if (attribute != null && attribute.format != shaderAttribute.getFormat()) {
-            // TODO: Throw exception here
-            return;
+            throw new AttributeTypeMismatchException(attributeName, attribute.format, shaderAttribute.getFormat());
         } else if (attribute == null) {
             attribute = new Attribute(attributeName, shaderAttribute.getFormat());
             this.attributes.add(attribute);

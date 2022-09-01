@@ -5,7 +5,7 @@ import static org.lwjgl.opengl.GL44.*;
 
 public abstract class PixelFormatMapGL4 {
 
-    public static final int[] internal = new int [] {
+    protected static final int[] internal = new int [] {
             GL_R8,                  // R8,
             GL_RG8,                 // R8G8,
             GL_RGB8,                // R8G8B8,
@@ -14,7 +14,7 @@ public abstract class PixelFormatMapGL4 {
             GL_DEPTH24_STENCIL8     // DEPTH24_STENCIL8
     };
 
-    public static final int[] client = new int [] {
+    protected static final int[] client = new int [] {
             GL_RED,                 // R8,
             GL_RG,                  // R8G8,
             GL_RGB,                 // R8G8B8,
@@ -24,7 +24,7 @@ public abstract class PixelFormatMapGL4 {
     };
 
 
-    public static final int[] format= new int [] {
+    protected static final int[] format= new int [] {
             GL_UNSIGNED_BYTE,       // R8,
             GL_UNSIGNED_BYTE,       // R8G8,
             GL_UNSIGNED_BYTE,       // R8G8B8,
