@@ -113,6 +113,7 @@ public class MaterialInstance implements IMaterial {
         return this.attributes.get(idx).texture;
     }
 
+    @Override
     public void bind(IGraphics graphics, ERenderPass pass) {
         if (!material.bindProgram(graphics, pass)) {
             return;

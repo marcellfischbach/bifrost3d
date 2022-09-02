@@ -1,9 +1,13 @@
 package com.bifrost3d.core.graphics.material;
 
+import com.bifrost3d.core.graphics.ERenderPass;
+import com.bifrost3d.core.graphics.IGraphics;
 import com.bifrost3d.core.graphics.ITexture;
 import com.bifrost3d.math.*;
 
 public interface IMaterial {
+
+    void bind(IGraphics graphics, ERenderPass pass);
 
     int indexOf(String attributeName);
 

@@ -4,11 +4,10 @@ import com.bifrost3d.core.Engine;
 import com.bifrost3d.core.ObjectRegistry;
 import com.bifrost3d.core.graphics.*;
 import com.bifrost3d.core.graphics.material.Material;
+import com.bifrost3d.core.graphics.scene.GfxMesh;
+import com.bifrost3d.core.graphics.scene.GfxScene;
 import com.bifrost3d.core.window.*;
-import com.bifrost3d.math.ColorRGBA;
-import com.bifrost3d.math.Matrix4f;
-import com.bifrost3d.math.Vector2f;
-import com.bifrost3d.math.Vector4f;
+import com.bifrost3d.math.*;
 
 import java.util.List;
 
@@ -20,10 +19,10 @@ public class Main {
         Mesh mesh = graphics.createMesh();
 
         List<Vector4f> vertices = mesh.getVertices();
-        vertices.add(new Vector4f(-0.5f, -0.5f, 0.0f, 1.0f));
-        vertices.add(new Vector4f(-0.5f, 0.5f, 0.0f, 1.0f));
-        vertices.add(new Vector4f(0.5f, -0.5f, 0.0f, 1.0f));
-        vertices.add(new Vector4f(0.5f, 0.5f, 0.0f, 1.0f));
+        vertices.add(new Vector4f(-5f, -5f, 0.0f, 1.0f));
+        vertices.add(new Vector4f(-5f, 5f, 0.0f, 1.0f));
+        vertices.add(new Vector4f(5f, -5f, 0.0f, 1.0f));
+        vertices.add(new Vector4f(5f, 5f, 0.0f, 1.0f));
         mesh.setVertices(vertices);
 
         List<Vector2f> uvs = mesh.getUv();
@@ -75,14 +74,14 @@ public class Main {
                 "layout(location = 5) in vec2 bf_UV;" +
                 "" +
                 "uniform mat4 bf_ModelMatrix;" +
-                "uniform mat4 bf_ProjectionMatrix;" +
+                "uniform mat4 bf_ProjectionViewMatrix;" +
                 "" +
                 "out vec4 color;" +
                 "out vec2 uv;" +
                 "" +
                 "void main ()" +
                 "{" +
-                "   gl_Position = bf_ProjectionMatrix * bf_ModelMatrix * bf_Position;" +
+                "   gl_Position = bf_ProjectionViewMatrix * bf_ModelMatrix * bf_Position;" +
                 "   color = vec4(1.0, 1.0, 1.0, 1.0);" +
                 "   uv = bf_UV;" +
                 "}";
@@ -167,7 +166,8 @@ public class Main {
         sampler.setAnisotropy(16);
 
 
-        Image image = createCheckerBoardImage(1024, 512, 64);
+        int checkSize = 512;
+        Image image = createCheckerBoardImage(checkSize, checkSize / 2, 128);
 
         ITexture2D texture2d = graphics.createTexture2D(image);
         texture2d.setSampler(sampler);
@@ -180,25 +180,34 @@ public class Main {
         material.setAttributeColor(diffuseColorIdx, new ColorRGBA(1.0f, 1.0f, 1.0f, 1.0f));
         material.setAttributeTexture(diffuseIdx, texture2d);
 
+        GfxMesh gfxMesh = new GfxMesh(mesh, material);
+        gfxMesh.setMatrix(Matrix4f.translation(0.0f, 0.0f, 0.0f));
 
 
         Matrix4f mat = new Matrix4f();
         Matrix4f matT = new Matrix4f();
         Matrix4f matY = new Matrix4f();
 
-        float aspect = (float) window.getHeight() / (float) window.getWidth();
-        Matrix4f projMat = Matrix4f.projection(-1.0f, 1.0f, -aspect, aspect, 1.0f, 1024.0f);
 
-
-        graphics.setProjectionMatrix(projMat);
         float rotValue = 0.0f;
+
+        Camera camera = new Camera();
+        camera.setSpot(new Vector3f(0.0f, 0.0f, 0.0f));
+        camera.setUp(new Vector3f(0.0f, 1.0f, 0.0f));
+
+        Projector projector = new Projector();
+
+        GfxScene scene = new GfxScene(graphics);
+        scene.add(gfxMesh);
 
 
         FPSCounter fpsCounter = new FPSCounter();
         int fps = 0;
         boolean running = true;
         boolean animate = true;
+        float rot = 0.0f;
         graphics.setClearColor(new ColorRGBA(0.0f, 0.0f, 0.5f, 1.0f));
+        Vector3f tmp = new Vector3f();
         while (running) {
             fpsCounter.tick();
             if (fps != fpsCounter.getFps()) {
@@ -210,16 +219,13 @@ public class Main {
 
             graphics.clear(true, true, true);
 
-            Matrix4f.translation(0.0f, 0.0f, -1.5f, matT);
-            Matrix4f.rotationY(rotValue, matY);
 
-            Matrix4f.mul(matT, matY, mat);
+            camera.setEye(tmp.set(Mathf.sin(rot) * 10.0f, 1.5f, Mathf.cos(rot) * 10.0f));
+            camera.setSpot(tmp.set(Mathf.sin(-rot), 1.0f, Mathf.cos(-rot)));
+            projector.setDimension(window.getWidth(), window.getHeight());
 
-            graphics.setModelMatrix(mat);
-            graphics.setProgram(program);
 
-            material.bind(graphics, ERenderPass.FORWARD);
-            graphics.renderMesh(mesh);
+            scene.render(ERenderPass.FORWARD, camera, projector);
 
             window.swap();
 
@@ -239,6 +245,7 @@ public class Main {
 
             if (animate) {
                 rotValue += 0.0125f;
+                rot += 0.0125f;
             }
         }
     }

@@ -21,6 +21,20 @@ public final class Vector3f {
         this.z = z;
     }
 
+    public Vector3f set (Vector3f v) {
+        this.x = v.x;
+        this.y = v.y;
+        this.z = v.z;
+        return this;
+    }
+
+    public Vector3f set(float x, float y, float z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        return this;
+    }
+
     public float length() {
         return Mathf.sqrt(x * x + y * y + z * z);
     }

@@ -576,4 +576,41 @@ public final class Matrix4f {
         return res;
     }
 
+
+
+    public static Matrix4f lookAt (Vector3f from, Vector3f at, Vector3f up) {
+        return lookAt(from, at, up, new Matrix4f());
+    }
+
+
+    public static Matrix4f lookAt (Vector3f from, Vector3f at, Vector3f up, Matrix4f r) {
+        Vector3f zAxis = Vector3f.sub (from, at);
+        zAxis.normalize();
+        Vector3f xAxis = Vector3f.cross(up, zAxis);
+        xAxis.normalize();
+        Vector3f yAxis = Vector3f.cross(zAxis, xAxis);
+
+
+        r.m00 = xAxis.x;
+        r.m01 = yAxis.x;
+        r.m02 = zAxis.x;
+        r.m03 = 0.0f;
+
+        r.m10 = xAxis.y;
+        r.m11 = yAxis.y;
+        r.m12 = zAxis.y;
+        r.m13 = 0.0f;
+
+        r.m20 = xAxis.z;
+        r.m21 = yAxis.z;
+        r.m22 = zAxis.z;
+        r.m23 = 0.0f;
+
+        r.m30 = -Vector3f.dot(xAxis, from);
+        r.m31 = -Vector3f.dot(yAxis, from);
+        r.m32 = -Vector3f.dot(zAxis, from);
+        r.m33 = 1.0f;
+
+        return r;
+    }
 }

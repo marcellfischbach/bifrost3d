@@ -26,6 +26,7 @@ public class Material implements IMaterial {
         return -1;
     }
 
+    @Override
     public void bind(IGraphics graphics, ERenderPass pass) {
         if (!bindProgram(graphics, pass)) {
             return;
