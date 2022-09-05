@@ -1,6 +1,6 @@
 {
     "shaders": [
-        { "locator":"test.frag" },
+        { "locator":":test.frag" },
         { "locator":":test.vert" }
     ],
     "attributes": [
