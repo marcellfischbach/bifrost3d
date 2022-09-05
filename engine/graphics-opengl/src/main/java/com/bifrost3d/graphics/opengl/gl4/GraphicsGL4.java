@@ -137,7 +137,7 @@ public class GraphicsGL4 implements IGraphics {
 
 
     @Override
-    public IShader createShader(EShaderType type) {
+    public ShaderGL4 createShader(EShaderType type) {
         return new ShaderGL4(type);
     }
 

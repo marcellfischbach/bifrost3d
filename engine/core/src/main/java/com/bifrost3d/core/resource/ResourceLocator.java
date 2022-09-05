@@ -53,6 +53,15 @@ public final class ResourceLocator {
         return this.hashCode;
     }
 
+    public String getFullFilename () {
+        if (this.ext.isEmpty()) {
+            return this.path + this.name;
+        }
+        else {
+            return this.path + this.name + "." + this.ext;
+        }
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {

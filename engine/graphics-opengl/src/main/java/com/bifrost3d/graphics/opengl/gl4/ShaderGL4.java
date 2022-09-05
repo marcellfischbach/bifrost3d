@@ -47,7 +47,8 @@ public class ShaderGL4 implements IShader {
 
         int status = glGetShaderi(this.name, GL_COMPILE_STATUS);
         if (status == GL_FALSE) {
-            String log = glGetShaderInfoLog(this.name); throw new ShaderCompileException(log);
+            String log = glGetShaderInfoLog(this.name);
+            throw new ShaderCompileException(log);
         }
     }
 

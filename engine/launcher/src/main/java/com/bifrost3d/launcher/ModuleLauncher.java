@@ -39,7 +39,7 @@ public class ModuleLauncher extends AbstractModule {
         iWindow.ifPresent(window -> {
             window.setWidth(1024);
             window.setHeight(768);
-//            window.setVSync(true);
+            window.setVSync(true);
             window.initialize();
         });
     }

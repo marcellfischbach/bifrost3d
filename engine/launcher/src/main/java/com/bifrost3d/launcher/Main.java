@@ -6,10 +6,13 @@ import com.bifrost3d.core.graphics.*;
 import com.bifrost3d.core.graphics.material.Material;
 import com.bifrost3d.core.graphics.scene.GfxMesh;
 import com.bifrost3d.core.graphics.scene.GfxScene;
+import com.bifrost3d.core.resource.AssetManager;
+import com.bifrost3d.core.resource.ResourceLocator;
 import com.bifrost3d.core.window.*;
 import com.bifrost3d.math.*;
 
 import java.util.List;
+import java.util.Optional;
 
 
 public class Main {
@@ -92,6 +95,9 @@ public class Main {
     }
 
     private static IShader createFragmentShader(IGraphics graphics) {
+        Optional<IShader> optShader = AssetManager.instance().load(IShader.class, new ResourceLocator("archive:///shaders/test.frag"));
+        return optShader.orElse(null);
+        /*
         String source = "" +
                 "#version 330\n" +
                 "" +
@@ -113,6 +119,8 @@ public class Main {
         shader.setSource(source);
         shader.compile();
         return shader;
+
+         */
     }
 
     private static Image createCheckerBoardImage(int size, int checkSize, int dither) {

@@ -4,8 +4,11 @@ import com.bifrost3d.core.AbstractModule;
 import com.bifrost3d.core.Engine;
 import com.bifrost3d.core.ObjectRegistry;
 import com.bifrost3d.core.graphics.IGraphics;
+import com.bifrost3d.core.resource.AssetManager;
 import com.bifrost3d.core.window.IWindow;
 import com.bifrost3d.graphics.opengl.gl4.GraphicsGL4;
+import com.bifrost3d.graphics.opengl.gl4.loader.ProgramLoaderGL4;
+import com.bifrost3d.graphics.opengl.gl4.loader.ShaderLoaderGL4;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -32,6 +35,8 @@ public class ModuleGL4 extends AbstractModule{
         GraphicsGL4 device = new GraphicsGL4();
         ObjectRegistry.register(IGraphics.class, device);
 
+        AssetManager.instance().registerLoader(new ShaderLoaderGL4());
+        AssetManager.instance().registerLoader(new ProgramLoaderGL4());
     }
 
     @Override

@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public class AssetManager {
 
-    private final List<IAssetLoader> loaders = new ArrayList<>();
+    private final List<IAssetLoader<?>> loaders = new ArrayList<>();
 
     private final List<ResourceLocator> locatorStack = new ArrayList<>();
 
@@ -16,19 +16,20 @@ public class AssetManager {
         this.locatorStack.clear();
     }
 
-    public void registerLoader(IAssetLoader loader) {
+    public void registerLoader(IAssetLoader<?> loader) {
         this.loaders.add(loader);
     }
 
-    public <T> Optional<T> load(Class<T> cls, ResourceLocator locator) {
+    @SuppressWarnings("unchecked")
+    public <T> Optional<T> load(Class<?> cls, ResourceLocator locator) {
         pushStack(locator);
 
         ResourceLocator absoluteLocator = buildAbsoluteResourceLocator();
         try {
-            for (IAssetLoader loader : this.loaders) {
+            for (IAssetLoader<?> loader : this.loaders) {
                 if (loader.canLoad(cls, absoluteLocator)) {
 
-                    Optional<T> optObject = loader.load(cls, absoluteLocator);
+                    Optional<T> optObject = (Optional<T>) loader.load(cls, absoluteLocator);
                     if (optObject.isPresent()) {
                         return optObject;
                     }
