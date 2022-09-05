@@ -3,9 +3,10 @@ package com.bifrost3d.core.graphics;
 import com.bifrost3d.math.Matrix3f;
 import com.bifrost3d.math.Matrix4f;
 
+@SuppressWarnings("unused")
 public interface IShaderAttribute {
 
-    EShaderAttributeFormat getFormat();
+    EShaderAttributeType getFormat();
 
     void setArrayIdx (int arrayIdx);
 

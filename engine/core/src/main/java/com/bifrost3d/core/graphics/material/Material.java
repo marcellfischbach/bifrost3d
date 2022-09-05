@@ -210,7 +210,7 @@ public class Material implements IMaterial {
     public static class Attribute {
         final String name;
         final IShaderAttribute[] attributes = new IShaderAttribute[ERenderPass.values().length];
-        final EShaderAttributeFormat format;
+        final EShaderAttributeType format;
 
         float valueFloat;
         Vector2f valueVec2;
@@ -221,7 +221,7 @@ public class Material implements IMaterial {
         Matrix4f valueMat4;
         ITexture texture;
 
-        public Attribute(String name, EShaderAttributeFormat format) {
+        public Attribute(String name, EShaderAttributeType format) {
             this.name = name;
             this.format = format;
         }

@@ -142,7 +142,7 @@ public class GraphicsGL4 implements IGraphics {
     }
 
     @Override
-    public IProgram createProgram() {
+    public ProgramGL4 createProgram() {
         return new ProgramGL4();
     }
 
@@ -255,18 +255,18 @@ public class GraphicsGL4 implements IGraphics {
 
     private void bindMatrices() {
         if (this.program != null) {
-            bindMatrix(EShaderAttributeType.MODEL_MATRIX);
-            bindMatrix(EShaderAttributeType.VIEW_MATRIX);
-            bindMatrix(EShaderAttributeType.PROJECTION_MATRIX);
+            bindMatrix(EShaderAttribute.MODEL_MATRIX);
+            bindMatrix(EShaderAttribute.VIEW_MATRIX);
+            bindMatrix(EShaderAttribute.PROJECTION_MATRIX);
 
-            bindMatrix(EShaderAttributeType.VIEW_MODEL_MATRIX);
+            bindMatrix(EShaderAttribute.VIEW_MODEL_MATRIX);
 
-            bindMatrix(EShaderAttributeType.PROJECTION_VIEW_MATRIX);
-            bindMatrix(EShaderAttributeType.PROJECTION_VIEW_MODEL_MATRIX);
+            bindMatrix(EShaderAttribute.PROJECTION_VIEW_MATRIX);
+            bindMatrix(EShaderAttribute.PROJECTION_VIEW_MODEL_MATRIX);
         }
     }
 
-    private void bindMatrix(EShaderAttributeType type) {
+    private void bindMatrix(EShaderAttribute type) {
         IShaderAttribute attribute = this.program.getAttribute(type);
         if (attribute != null) {
             switch (type) {

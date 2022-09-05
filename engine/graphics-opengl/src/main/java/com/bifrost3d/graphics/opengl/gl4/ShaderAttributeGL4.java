@@ -1,6 +1,6 @@
 package com.bifrost3d.graphics.opengl.gl4;
 
-import com.bifrost3d.core.graphics.EShaderAttributeFormat;
+import com.bifrost3d.core.graphics.EShaderAttributeType;
 import com.bifrost3d.core.graphics.IShaderAttribute;
 import com.bifrost3d.math.Matrix3f;
 import com.bifrost3d.math.Matrix4f;
@@ -9,7 +9,7 @@ import static org.lwjgl.opengl.GL44.*;
 
 public class ShaderAttributeGL4 implements IShaderAttribute {
 
-    private final EShaderAttributeFormat format;
+    private final EShaderAttributeType format;
 
     private final int idx;
 
@@ -20,7 +20,7 @@ public class ShaderAttributeGL4 implements IShaderAttribute {
     private static final float[] mat3Buffer = new float[9];
     private static final float[] mat4Buffer = new float[16];
 
-    public ShaderAttributeGL4(EShaderAttributeFormat format, int idx) {
+    public ShaderAttributeGL4(EShaderAttributeType format, int idx) {
         this.format = format;
         this.idx = idx;
         this.arrayIdx = 0;
@@ -34,7 +34,7 @@ public class ShaderAttributeGL4 implements IShaderAttribute {
     }
 
     @Override
-    public EShaderAttributeFormat getFormat() {
+    public EShaderAttributeType getFormat() {
         return this.format;
     }
 

@@ -1,0 +1,10 @@
+{
+    "shaders": [
+        { "locator":"archive:///test.frag" },
+        { "locator":":test.vert" }
+    ],
+    "attributes": [
+        { "attribute":"Diffuse", "type":"TEXTURE" },
+        { "attribute":"DiffuseColor", "type":"COL4" }
+    ]
+}

@@ -119,5 +119,8 @@ public final class ResourceLocator {
         return encodedResource.substring(idx + 1);
     }
 
-
+    @Override
+    public String toString() {
+        return encoded;
+    }
 }

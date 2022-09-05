@@ -11,7 +11,7 @@ public class ProgramGL4 implements IProgram {
 
     private int name;
 
-    private final ShaderAttributeGL4[] defaultAttributes = new ShaderAttributeGL4[EShaderAttributeType.values().length];
+    private final ShaderAttributeGL4[] defaultAttributes = new ShaderAttributeGL4[EShaderAttribute.values().length];
 
     private final Map<String, ShaderAttributeGL4> namedAttributesMap = new HashMap<>();
     private final List<NamedAttribute> namedAttributes = new ArrayList<>();
@@ -57,25 +57,23 @@ public class ProgramGL4 implements IProgram {
     }
 
     @Override
-    public int registerAttribute(String attributeName, EShaderAttributeFormat format) {
+    public void registerAttribute(String attributeName, EShaderAttributeType format) {
         int idx = indexOf(attributeName);
         if (idx != -1) {
-            return idx;
+            return;
         }
 
         String attribteNameInSource = ConstGL4.SHADER_PREFIX + attributeName;
         int loc = glGetUniformLocation(this.name, attribteNameInSource);
         if (loc == -1) {
-            return -1;
+            return;
         }
 
-        idx = this.namedAttributes.size();
         ShaderAttributeGL4 attribute = new ShaderAttributeGL4(format, loc);
 
         namedAttributes.add(new NamedAttribute(attributeName, attribute));
         namedAttributesMap.put(attributeName, attribute);
 
-        return idx;
     }
 
     @Override
@@ -84,7 +82,7 @@ public class ProgramGL4 implements IProgram {
     }
 
     @Override
-    public IShaderAttribute getAttribute(EShaderAttributeType type) {
+    public IShaderAttribute getAttribute(EShaderAttribute type) {
         return this.defaultAttributes[type.ordinal()];
     }
 
@@ -108,7 +106,7 @@ public class ProgramGL4 implements IProgram {
 
     private void registerDefaultAttributes() {
 
-        for (EShaderAttributeType value : EShaderAttributeType.values()) {
+        for (EShaderAttribute value : EShaderAttribute.values()) {
             String attribName = value.attributeName;
 
             int loc = glGetUniformLocation(this.name, ConstGL4.SHADER_PREFIX + attribName);

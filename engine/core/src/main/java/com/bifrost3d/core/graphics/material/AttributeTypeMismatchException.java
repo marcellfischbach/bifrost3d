@@ -1,16 +1,17 @@
 package com.bifrost3d.core.graphics.material;
 
-import com.bifrost3d.core.graphics.EShaderAttributeFormat;
+import com.bifrost3d.core.graphics.EShaderAttributeType;
 
+@SuppressWarnings("unused")
 public class AttributeTypeMismatchException extends RuntimeException {
 
     private final String attributeName;
 
-    private final EShaderAttributeFormat currentFormat;
+    private final EShaderAttributeType currentFormat;
 
-    private final EShaderAttributeFormat newFormat;
+    private final EShaderAttributeType newFormat;
 
-    public AttributeTypeMismatchException(String attributeName, EShaderAttributeFormat currentFormat, EShaderAttributeFormat newFormat) {
+    public AttributeTypeMismatchException(String attributeName, EShaderAttributeType currentFormat, EShaderAttributeType newFormat) {
         super ("Attribute '" + attributeName + "' already registered as '" + currentFormat + "'. Try to register as '" + newFormat + "'");
         this.attributeName = attributeName;
         this.currentFormat = currentFormat;
@@ -21,11 +22,11 @@ public class AttributeTypeMismatchException extends RuntimeException {
         return attributeName;
     }
 
-    public EShaderAttributeFormat getCurrentFormat() {
+    public EShaderAttributeType getCurrentFormat() {
         return currentFormat;
     }
 
-    public EShaderAttributeFormat getNewFormat() {
+    public EShaderAttributeType getNewFormat() {
         return newFormat;
     }
 }

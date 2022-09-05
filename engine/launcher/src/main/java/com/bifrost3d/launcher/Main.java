@@ -10,12 +10,16 @@ import com.bifrost3d.core.resource.AssetManager;
 import com.bifrost3d.core.resource.ResourceLocator;
 import com.bifrost3d.core.window.*;
 import com.bifrost3d.math.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 import java.util.Optional;
 
 
 public class Main {
+
+    private static final Logger LOGGER = LogManager.getLogger(Main.class);
 
     private static Mesh generateMesh(IGraphics graphics, float textureStretch) {
 
@@ -57,70 +61,14 @@ public class Main {
         return mesh;
     }
 
-    private static IProgram createProgram(IGraphics graphics) {
-        IProgram program = graphics.createProgram();
-        program.attach(createVertexShader(graphics));
-        program.attach(createFragmentShader(graphics));
-        program.link();
-
-        program.registerAttribute("Diffuse", EShaderAttributeFormat.TEXTURE);
-        program.registerAttribute("DiffuseColor", EShaderAttributeFormat.COL4);
-        return program;
-    }
-
-
-    private static IShader createVertexShader(IGraphics graphics) {
-        String source = "" +
-                "#version 330\n" +
-                "" +
-                "layout(location = 0) in vec4 bf_Position;" +
-                "layout(location = 5) in vec2 bf_UV;" +
-                "" +
-                "uniform mat4 bf_ModelMatrix;" +
-                "uniform mat4 bf_ProjectionViewMatrix;" +
-                "" +
-                "out vec4 color;" +
-                "out vec2 uv;" +
-                "" +
-                "void main ()" +
-                "{" +
-                "   gl_Position = bf_ProjectionViewMatrix * bf_ModelMatrix * bf_Position;" +
-                "   color = vec4(1.0, 1.0, 1.0, 1.0);" +
-                "   uv = bf_UV;" +
-                "}";
-        IShader shader = graphics.createShader(EShaderType.VERTEX);
-        shader.setSource(source);
-        shader.compile();
-        return shader;
-    }
-
-    private static IShader createFragmentShader(IGraphics graphics) {
-        Optional<IShader> optShader = AssetManager.instance().load(IShader.class, new ResourceLocator("archive:///shaders/test.frag"));
-        return optShader.orElse(null);
-        /*
-        String source = "" +
-                "#version 330\n" +
-                "" +
-                "layout(location = 0) out vec4 bf_FragColor;" +
-                "" +
-                "uniform vec4 bf_DiffuseColor;" +
-                "uniform sampler2D bf_Diffuse;" +
-                "" +
-                "in vec4 color;" +
-                "in vec2 uv;" +
-                "" +
-                "void main ()" +
-                "{" +
-                "   vec4 tex = texture(bf_Diffuse, uv);" +
-                "   bf_FragColor = tex * color * bf_DiffuseColor;" +
-                "}";
-
-        IShader shader = graphics.createShader(EShaderType.FRAGMENT);
-        shader.setSource(source);
-        shader.compile();
-        return shader;
-
-         */
+    private static IProgram loadProgram() {
+        try {
+            Optional<IProgram> optProgram = AssetManager.instance().load(IProgram.class, new ResourceLocator("archive:///shaders/test.prog"));
+            return optProgram.orElse(null);
+        } catch (Exception e) {
+            LOGGER.error("", e);
+        }
+        return null;
     }
 
     private static Image createCheckerBoardImage(int size, int checkSize, int dither) {
@@ -138,8 +86,7 @@ public class Main {
                 byte rnd = (byte) (Math.random() * dither);
                 if (check) {
                     value -= rnd;
-                }
-                else {
+                } else {
                     value += rnd;
                 }
 
@@ -166,7 +113,7 @@ public class Main {
 
 
         Mesh mesh = generateMesh(graphics, 8);
-        IProgram program = createProgram(graphics);
+        IProgram program = loadProgram();
 
 
         ISampler sampler = graphics.createSampler();
@@ -191,13 +138,6 @@ public class Main {
         GfxMesh gfxMesh = new GfxMesh(mesh, material);
         gfxMesh.setMatrix(Matrix4f.translation(0.0f, 0.0f, 0.0f));
 
-
-        Matrix4f mat = new Matrix4f();
-        Matrix4f matT = new Matrix4f();
-        Matrix4f matY = new Matrix4f();
-
-
-        float rotValue = 0.0f;
 
         Camera camera = new Camera();
         camera.setSpot(new Vector3f(0.0f, 0.0f, 0.0f));
@@ -252,12 +192,10 @@ public class Main {
 
 
             if (animate) {
-                rotValue += 0.0125f;
                 rot += 0.0125f;
             }
         }
     }
-
 
 
     private static class FPSCounter {

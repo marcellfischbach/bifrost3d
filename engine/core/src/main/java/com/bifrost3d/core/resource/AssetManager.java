@@ -22,6 +22,7 @@ public class AssetManager {
 
     @SuppressWarnings("unchecked")
     public <T> Optional<T> load(Class<?> cls, ResourceLocator locator) {
+        validStack(locator);
         pushStack(locator);
 
         ResourceLocator absoluteLocator = buildAbsoluteResourceLocator();
@@ -41,6 +42,22 @@ public class AssetManager {
         }
     }
 
+    private void validStack (ResourceLocator locator) {
+        if (this.locatorStack.isEmpty()) {
+            if (locator.getProtocol() == ResourceLocator.Protocol.LOCAL || !locator.isAbsolute()) {
+                throw new ProtocolMismatchException();
+            }
+        }
+        else {
+            if (locator.getProtocol() != ResourceLocator.Protocol.LOCAL) {
+                int lastAbsolutePathIndexOnStack = findLastAbsolutePathIndexOnStack();
+                ResourceLocator lastAbsoluteLocator = this.locatorStack.get(lastAbsolutePathIndexOnStack);
+                if (lastAbsoluteLocator.getProtocol() != locator.getProtocol()) {
+                    throw new ProtocolMismatchException();
+                }
+            }
+        }
+    }
 
     private void pushStack(ResourceLocator locator) {
         this.locatorStack.add(locator);
@@ -52,6 +69,7 @@ public class AssetManager {
         }
         this.locatorStack.remove(this.locatorStack.size() - 1);
     }
+
 
     private ResourceLocator buildAbsoluteResourceLocator() {
         String absoluteEncodedResource = buildAbsoluteEncodedResourceFromStack();
@@ -72,7 +90,11 @@ public class AssetManager {
         }
 
         locator = this.locatorStack.get(this.locatorStack.size() - 1);
-        sb.append(locator.getPath());
+        if (!locator.isAbsolute()) {
+            // if the locator is relative than the path part of the last locator matters
+            // if the locator is absolute the path part does not matter because is already part of the string builder
+            sb.append(locator.getPath());
+        }
         sb.append(locator.getName());
         if (!locator.getExt().isEmpty()) {
             sb.append(".");
