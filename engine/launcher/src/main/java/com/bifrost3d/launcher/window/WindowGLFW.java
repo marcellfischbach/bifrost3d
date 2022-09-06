@@ -29,6 +29,7 @@ public class WindowGLFW implements IWindow {
         glfwWindowHint(GLFW_GREEN_BITS, 8);
         glfwWindowHint(GLFW_BLUE_BITS, 8);
         glfwWindowHint(GLFW_ALPHA_BITS, 8);
+        glfwWindowHint(GLFW_SAMPLES, 16);
 
 
         this.wnd = glfwCreateWindow(this.width, this.height, this.title, 0, 0);

@@ -4,16 +4,12 @@ import com.bifrost3d.core.ObjectRegistry;
 import com.bifrost3d.core.graphics.EShaderType;
 import com.bifrost3d.core.graphics.IGraphics;
 import com.bifrost3d.core.graphics.IllegalShaderTypeException;
-import com.bifrost3d.core.resource.IAssetLoader;
-import com.bifrost3d.core.resource.ReadAllFromInputStream;
-import com.bifrost3d.core.resource.ResourceLocator;
-import com.bifrost3d.core.resource.VFS;
+import com.bifrost3d.core.resource.*;
 import com.bifrost3d.graphics.opengl.gl4.GraphicsGL4;
 import com.bifrost3d.graphics.opengl.gl4.ShaderGL4;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.InputStream;
 import java.util.Optional;
 
 public class ShaderLoaderGL4 implements IAssetLoader<ShaderGL4> {
@@ -34,13 +30,16 @@ public class ShaderLoaderGL4 implements IAssetLoader<ShaderGL4> {
 
     @Override
     public Optional<ShaderGL4> load(Class<?> cls, ResourceLocator locator) {
-        Optional<InputStream> optInputStream = VFS.instance().open(locator);
-        return optInputStream.map(inputStream -> loadShader(getType(locator), inputStream));
+        Optional<ShaderSource> optShaderSource = AssetManager.instance().load(ShaderSource.class, locator.asLocal());
+
+        return optShaderSource.map(shaderSource -> loadShader(getType(locator), shaderSource));
     }
 
-    private ShaderGL4 loadShader(EShaderType shaderType, InputStream inputStream) {
+    private ShaderGL4 loadShader(EShaderType shaderType, ShaderSource shaderSource) {
         try {
-            String source = ReadAllFromInputStream.read(inputStream);
+
+            String source = shaderSource.getSource();
+            source = ShaderCodeParser.parse(source);
             Optional<GraphicsGL4> optGraphics = ObjectRegistry.get(IGraphics.class, GraphicsGL4.class);
             if (optGraphics.isPresent()) {
                 GraphicsGL4 gl4 = optGraphics.get();
@@ -57,18 +56,22 @@ public class ShaderLoaderGL4 implements IAssetLoader<ShaderGL4> {
 
     private EShaderType getType(ResourceLocator locator) {
         String ext = locator.getExt().toLowerCase();
-        if ("vert".equals(ext) || "vs".equals(ext)) {
-            return EShaderType.VERTEX;
-        } else if ("frag".equals(ext)) {
-            return EShaderType.FRAGMENT;
-        } else if ("geom".equals(ext)) {
-            return EShaderType.GEOMETRY;
-        } else if ("ctrl".equals(ext)) {
-            return EShaderType.TESS_CTRL;
-        } else if ("eval".equals(ext)) {
-            return EShaderType.TESS_EVAL;
-        } else if ("comp".equals(ext)) {
-            return EShaderType.COMPUTE;
+        switch (ext) {
+            case "vert":
+            case "vs":
+                return EShaderType.VERTEX;
+            case "frag":
+                return EShaderType.FRAGMENT;
+            case "geom":
+                return EShaderType.GEOMETRY;
+            case "ctrl":
+                return EShaderType.TESS_CTRL;
+            case "eval":
+                return EShaderType.TESS_EVAL;
+            case "comp":
+                return EShaderType.COMPUTE;
+            default:
+                break;
         }
         throw new IllegalShaderTypeException();
     }

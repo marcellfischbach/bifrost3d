@@ -87,16 +87,16 @@ class AssetManagerTest {
 
 
     private void registerDefaultStringLoader(String returnValue) {
-        AssetManager.instance().registerLoader(new IAssetLoader() {
+        AssetManager.instance().registerLoader(new IAssetLoader<String>() {
             @Override
             public boolean canLoad(Class<?> cls, ResourceLocator locator) {
                 return cls.isAssignableFrom(String.class);
             }
 
             @Override
-            public <T> Optional<T> load(Class<T> cls, ResourceLocator locator) {
+            public Optional<String> load(Class<?> cls, ResourceLocator locator) {
                 if (cls.isAssignableFrom(String.class)) {
-                    return Optional.of(cls.cast(returnValue));
+                    return Optional.of(returnValue);
                 }
                 return Optional.empty();
             }
@@ -112,14 +112,14 @@ class AssetManagerTest {
     }
 
     private void registerReloadLoader(ReloadData... data) {
-        AssetManager.instance().registerLoader(new IAssetLoader() {
+        AssetManager.instance().registerLoader(new IAssetLoader<String>() {
             @Override
             public boolean canLoad(Class<?> cls, ResourceLocator locator) {
                 return cls.isAssignableFrom(String.class);
             }
 
             @Override
-            public <T> Optional<T> load(Class<T> cls, ResourceLocator locator) {
+            public Optional<String> load(Class<?> cls, ResourceLocator locator) {
                 if (cls.isAssignableFrom(String.class)) {
 
                     for (ReloadData datum : data) {
@@ -127,7 +127,7 @@ class AssetManagerTest {
                             return AssetManager.instance().load(cls, datum.loadLocator);
                         }
                     }
-                    return Optional.of(cls.cast(locator.getEncoded()));
+                    return Optional.of(locator.getEncoded());
                 }
                 return Optional.empty();
             }

@@ -73,6 +73,13 @@ public final class ResourceLocator {
         return false;
     }
 
+    private String getDotExt() {
+        if (this.ext.isEmpty()) {
+            return "";
+        }
+        return String.format(".%s", this.ext);
+    }
+
     private Protocol extractProtocol(String encodedResource) {
         for (Protocol proto : Protocol.values()) {
             if (encodedResource.startsWith(proto.value)) {
@@ -122,5 +129,9 @@ public final class ResourceLocator {
     @Override
     public String toString() {
         return encoded;
+    }
+
+    public ResourceLocator asLocal () {
+        return new ResourceLocator(String.format(":%s%s", this.name, getDotExt()));
     }
 }
