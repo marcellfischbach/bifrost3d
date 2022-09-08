@@ -1,5 +1,7 @@
 package com.bifrost3d.core;
 
+import com.bifrost3d.core.resource.VFS;
+
 import java.util.*;
 
 public class EngineBootstrapper {
@@ -11,8 +13,13 @@ public class EngineBootstrapper {
     public EngineBootstrapper(Engine engine) {
         this.engine = engine;
         collectModulesAndSortByDependencies();
+        initDefaultVFS();
     }
 
+    private void initDefaultVFS() {
+        VFS.instance().addVolume("Engine", "assets/engine/", -1);
+
+    }
 
     private void collectModulesAndSortByDependencies() {
         Set<IModule> allModules = collectAllModules();

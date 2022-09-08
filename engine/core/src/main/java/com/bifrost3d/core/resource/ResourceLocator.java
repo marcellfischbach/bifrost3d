@@ -54,12 +54,7 @@ public final class ResourceLocator {
     }
 
     public String getFullFilename () {
-        if (this.ext.isEmpty()) {
-            return this.path + this.name;
-        }
-        else {
-            return this.path + this.name + "." + this.ext;
-        }
+        return this.path + this.name + getDotExt();
     }
 
     @Override
